@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.py[cod]
+.claude/settings.local.json
+
+# Run outputs
+voc/
+mor_voc/
+smoke_test_run/
+samples/
+*.pth
+
+# Datasets
+data/

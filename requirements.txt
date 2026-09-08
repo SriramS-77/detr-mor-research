@@ -1,0 +1,13 @@
+# Core. Install torch/torchvision matching your CUDA version first, e.g.:
+#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+# CPU only (enough for scripts/smoke_test.py):
+#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+torch>=2.0
+torchvision>=0.15
+numpy
+scipy
+PyYAML
+tqdm
+
+# Optional: only scripts/infer.py needs it, for drawing sample detections.
+# opencv-python
