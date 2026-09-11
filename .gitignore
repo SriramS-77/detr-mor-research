@@ -12,3 +12,4 @@ samples/
 
 # Datasets
 data/
+!detr_mor/data/
