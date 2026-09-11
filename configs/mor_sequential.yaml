@@ -35,7 +35,7 @@ model_params:
   # application, so (encoder_num_blocks - 2) * encoder_num_recursions - 1 = 3).
   # Raise encoder_num_recursions, not encoder_num_blocks, to route more often
   # under 'cyclic'.
-  encoder_recursion_type : 'cyclic'
+  encoder_recursion_type : 'sequential'
   encoder_attn_heads : 8
   # DECODER - same Middle-* layout, applied to the object queries. Only the
   # query side is routed; cross-attention always sees the full encoder output.
@@ -43,7 +43,7 @@ model_params:
   # and 2 + (4-2)*2 = 6 under 'sequential'. Must also be >= 3 blocks.
   decoder_num_recursions : 3
   decoder_num_blocks : 4
-  decoder_recursion_type : 'cyclic'
+  decoder_recursion_type : 'sequential'
   decoder_attn_heads : 8
   dropout_prob : 0.1
   ff_inner_dim : 2048
@@ -55,18 +55,18 @@ model_params:
 
 
 train_params:
-  task_name: 'mor_voc'
+  task_name: 'mor_sequential_voc_results'
   eval_score_threshold: 0.0
   infer_score_threshold: 0.5
   use_nms_eval : False
   use_nms_infer : True
   seed: 1111
   acc_steps: 1
-  num_epochs: 1 #150
-  batch_size: 4
+  num_epochs: 300
+  batch_size: 16
   lr_steps: [ 200 ]
   lr: 0.0001
   log_steps : 500
-  ckpt_name: 'mor_cyclic_detr.pth'
+  ckpt_name: 'mor_sequential_detr.pth'
   # Fraction of the train imageset held out for per-epoch validation.
   val_split: 0.2

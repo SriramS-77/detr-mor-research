@@ -31,7 +31,7 @@ from detr_mor.engine import (
     train_one_epoch,
 )
 from detr_mor.evaluation import compute_map
-from detr_mor.models import build_model
+from detr_mor.models import MoREncoder, build_model
 from detr_mor.utils import batch_images_to_device, set_seed, targets_to_device
 
 # Deliberately tiny so the whole thing runs in seconds on a laptop CPU.
@@ -53,11 +53,15 @@ SMOKE_MODEL_CONFIG = {
     'encoder_attn_heads': 4,
     'decoder_layers': 2,
     'decoder_attn_heads': 4,
-    # MoR: 2 blocks x 2 recursions == effective depth 4
-    'encoder_num_blocks': 2,
+    # MoR: Middle-* over 4 blocks (2 unique + 2 shared) x 2 recursions ==
+    # effective depth 2 + 2*2 = 6. Must be >= 3 blocks or the middle group is
+    # empty; run_checks() overrides the schedules per variant.
+    'encoder_num_blocks': 4,
     'encoder_num_recursions': 2,
-    'decoder_num_blocks': 2,
+    'encoder_recursion_type': 'cyclic',
+    'decoder_num_blocks': 4,
     'decoder_num_recursions': 2,
+    'decoder_recursion_type': 'cyclic',
     'dropout_prob': 0.1,
     'ff_inner_dim': 128,
     'cls_cost_weight': 1.,
@@ -183,8 +187,10 @@ def _batch(dataset, batch_size, device):
             targets_to_device(list(targets), device))
 
 
-def run_checks(model_type, device, pretrained, reporter):
-    print('\n=== {} ==='.format(model_type.upper()))
+def run_checks(model_type, device, pretrained, reporter, model_config=None,
+               label=None):
+    model_config = model_config or SMOKE_MODEL_CONFIG
+    print('\n=== {} ==='.format(label or model_type.upper()))
     set_seed(SMOKE_TRAIN_CONFIG['seed'])
 
     dataset = SyntheticDetectionDataset(
@@ -193,7 +199,7 @@ def run_checks(model_type, device, pretrained, reporter):
         num_classes=SMOKE_DATASET_CONFIG['num_classes'],
         bg_class_idx=SMOKE_DATASET_CONFIG['bg_class_idx'])
 
-    model = build_model(model_type, SMOKE_MODEL_CONFIG, SMOKE_DATASET_CONFIG,
+    model = build_model(model_type, model_config, SMOKE_DATASET_CONFIG,
                         device=device, pretrained_backbone=pretrained)
     batch_size = SMOKE_TRAIN_CONFIG['batch_size']
     images, targets = _batch(dataset, batch_size, device)
@@ -306,7 +312,7 @@ def run_checks(model_type, device, pretrained, reporter):
                            use_nms=False)
         detections = _check_detections(output['detections'], batch_size)
         counts = [int(d['boxes'].shape[0]) for d in detections]
-        assert all(count == SMOKE_MODEL_CONFIG['num_queries']
+        assert all(count == model_config['num_queries']
                    for count in counts), \
             'with score_thresh=0 every query should survive, got {}'.format(counts)
         state['detections'] = detections
@@ -318,7 +324,7 @@ def run_checks(model_type, device, pretrained, reporter):
             output = model(images, targets=None, score_thresh=0.0, use_nms=True)
         detections = _check_detections(output['detections'], batch_size)
         counts = [int(d['boxes'].shape[0]) for d in detections]
-        assert all(count <= SMOKE_MODEL_CONFIG['num_queries']
+        assert all(count <= model_config['num_queries']
                    for count in counts), \
             'NMS returned more boxes than queries: {}'.format(counts)
         return 'detections per image after NMS: {}'.format(counts)
@@ -377,7 +383,7 @@ def run_checks(model_type, device, pretrained, reporter):
 
             original = copy.deepcopy(model.state_dict())
 
-            reloaded = build_model(model_type, SMOKE_MODEL_CONFIG,
+            reloaded = build_model(model_type, model_config,
                                    SMOKE_DATASET_CONFIG, device=device,
                                    pretrained_backbone=False)
             optimizer = build_optimizer(reloaded, SMOKE_TRAIN_CONFIG)
@@ -429,7 +435,17 @@ def main():
 
     reporter = CheckReporter()
     for model_type in model_types:
-        run_checks(model_type, device, not args.no_pretrained, reporter)
+        if model_type != 'mor':
+            run_checks(model_type, device, not args.no_pretrained, reporter)
+            continue
+        # Each recursion schedule is a separate code path, so check both.
+        for recursion_type in MoREncoder.RECURSION_TYPES:
+            config = dict(SMOKE_MODEL_CONFIG,
+                          encoder_recursion_type=recursion_type,
+                          decoder_recursion_type=recursion_type)
+            run_checks(model_type, device, not args.no_pretrained, reporter,
+                       model_config=config,
+                       label='MOR ({} recursion)'.format(recursion_type))
 
     print()
     if reporter.failures:

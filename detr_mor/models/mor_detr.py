@@ -21,8 +21,11 @@ class MoRDETR(nn.Module):
         4. MoR Decoder
         5. Class and BBox MLP
 
-    Effective decoder depth (and therefore the number of deeply-supervised
-    outputs) is ``decoder_num_blocks * decoder_num_recursions``.
+    Both stacks follow the paper's Middle-Cycle / Middle-Sequence layout, so
+    each has effective depth ``2 + (num_blocks - 2) * num_recursions`` at the
+    parameter cost of ``num_blocks`` layers; ``*_recursion_type`` picks the
+    schedule. The number of deeply-supervised decoder outputs depends on that
+    schedule and is read back from the decoder as ``num_decoder_layers``.
 
     :param config: config['model_params']
     :param num_classes: including background
@@ -44,7 +47,6 @@ class MoRDETR(nn.Module):
         self.num_classes = num_classes
         self.num_recursions = config['decoder_num_recursions']  # per block
         self.num_blocks = config['decoder_num_blocks']
-        self.num_decoder_layers = self.num_recursions * self.num_blocks
         self.cls_cost_weight = config['cls_cost_weight']
         self.l1_cost_weight = config['l1_cost_weight']
         self.giou_cost_weight = config['giou_cost_weight']
@@ -66,7 +68,8 @@ class MoRDETR(nn.Module):
             num_heads=config['encoder_attn_heads'],
             d_model=config['d_model'],
             ff_inner_dim=config['ff_inner_dim'],
-            dropout_prob=config['dropout_prob'])
+            dropout_prob=config['dropout_prob'],
+            recursion_type=config['encoder_recursion_type'])
         self.query_embed = nn.Parameter(
             torch.randn(self.num_queries, self.d_model))
         self.decoder = MoRDecoder(
@@ -75,7 +78,11 @@ class MoRDETR(nn.Module):
             num_heads=config['decoder_attn_heads'],
             d_model=config['d_model'],
             ff_inner_dim=config['ff_inner_dim'],
-            dropout_prob=config['dropout_prob'])
+            dropout_prob=config['dropout_prob'],
+            recursion_type=config['decoder_recursion_type'])
+        # Depends on the decoder's recursion schedule, so read it back rather
+        # than recomputing it here.
+        self.num_decoder_layers = self.decoder.num_outputs
         self.class_mlp = nn.Linear(self.d_model, self.num_classes)
         self.bbox_mlp = nn.Sequential(
             nn.Linear(self.d_model, self.d_model),

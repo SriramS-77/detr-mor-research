@@ -6,6 +6,8 @@ Example::
 """
 
 import argparse
+import datetime
+import json
 import os
 
 import _bootstrap  # noqa: F401  (sys.path setup)
@@ -34,7 +36,33 @@ def parse_args():
     parser.add_argument('--method', choices=('area', 'interp'), default='area',
                         help="'area' for all-point AP, 'interp' for VOC2007 "
                              "11-point AP")
+    parser.add_argument('--out', default=None,
+                        help='where to write the JSON results '
+                             '(default: {task_name}/eval_results.json); '
+                             "pass 'none' to skip writing")
     return parser.parse_args()
+
+
+def write_results(path, args, train_config, ckpt, mean_ap, all_aps):
+    r"""Dump the mAP numbers plus enough context to tell two runs apart."""
+    payload = {
+        'timestamp': datetime.datetime.now().isoformat(timespec='seconds'),
+        'config': args.config,
+        'model': args.model,
+        'checkpoint': ckpt,
+        'iou_threshold': args.iou_threshold,
+        'method': args.method,
+        'score_threshold': train_config['eval_score_threshold'],
+        'use_nms': train_config['use_nms_eval'],
+        'mean_ap': float(mean_ap),
+        'class_ap': {name: float(ap) for name, ap in all_aps.items()},
+    }
+    parent = os.path.dirname(path)
+    if parent:
+        os.makedirs(parent, exist_ok=True)
+    with open(path, 'w', encoding='utf-8') as handle:
+        json.dump(payload, handle, indent=2, sort_keys=True)
+    print('Wrote results to {}'.format(path))
 
 
 def main():
@@ -61,8 +89,14 @@ def main():
     load_checkpoint(ckpt, model, map_location=device)
     model.eval()
 
-    evaluate_map(model, voc, test_loader, device, train_config,
-                 method=args.method, iou_threshold=args.iou_threshold)
+    mean_ap, all_aps = evaluate_map(
+        model, voc, test_loader, device, train_config,
+        method=args.method, iou_threshold=args.iou_threshold)
+
+    if args.out != 'none':
+        out = args.out or os.path.join(train_config['task_name'],
+                                       'eval_results.json')
+        write_results(out, args, train_config, ckpt, mean_ap, all_aps)
 
 
 if __name__ == '__main__':

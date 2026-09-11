@@ -20,8 +20,10 @@ REQUIRED_KEYS = {
 MODEL_SPECIFIC_KEYS = {
     'detr': ('encoder_layers', 'encoder_attn_heads',
              'decoder_layers', 'decoder_attn_heads'),
-    'mor': ('encoder_num_blocks', 'encoder_num_recursions', 'encoder_attn_heads',
-            'decoder_num_blocks', 'decoder_num_recursions', 'decoder_attn_heads'),
+    'mor': ('encoder_num_blocks', 'encoder_num_recursions',
+            'encoder_recursion_type', 'encoder_attn_heads',
+            'decoder_num_blocks', 'decoder_num_recursions',
+            'decoder_recursion_type', 'decoder_attn_heads'),
 }
 
 

@@ -55,15 +55,15 @@ model_params:
 
 
 train_params:
-  task_name: 'mor_voc'
+  task_name: 'mor_cyclic_voc_results'
   eval_score_threshold: 0.0
   infer_score_threshold: 0.5
   use_nms_eval : False
   use_nms_infer : True
   seed: 1111
   acc_steps: 1
-  num_epochs: 1 #150
-  batch_size: 4
+  num_epochs: 300
+  batch_size: 16
   lr_steps: [ 200 ]
   lr: 0.0001
   log_steps : 500

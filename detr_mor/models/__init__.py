@@ -4,7 +4,11 @@ from detr_mor.models.criterion import HungarianMatcher, SetCriterion
 from detr_mor.models.detr import DETR
 from detr_mor.models.mor import (
     MoRDecoder,
+    MoRDecoderCyclicRecursion,
+    MoRDecoderSequentialRecursion,
     MoREncoder,
+    MoREncoderCyclicRecursion,
+    MoREncoderSequentialRecursion,
     MoRExpertRouter,
     MoRRecursionBlock,
 )
@@ -19,7 +23,11 @@ __all__ = [
     'MODEL_TYPES',
     'MoRDETR',
     'MoRDecoder',
+    'MoRDecoderCyclicRecursion',
+    'MoRDecoderSequentialRecursion',
     'MoREncoder',
+    'MoREncoderCyclicRecursion',
+    'MoREncoderSequentialRecursion',
     'MoRExpertRouter',
     'MoRRecursionBlock',
     'SetCriterion',

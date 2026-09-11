@@ -15,16 +15,16 @@ voc_dataset = datasets.VOCDetection(
 
 print(f"VOC 2007 train images downloaded: {len(voc_dataset)}")
 
-# # Download and load the training data
-# voc_dataset = datasets.VOCDetection(
-#     root='./data', 
-#     year='2007', 
-#     image_set='test', 
-#     download=True, 
-#     transform=transform
-# )
+# Download and load the training data
+voc_dataset = datasets.VOCDetection(
+    root='./data', 
+    year='2007', 
+    image_set='test', 
+    download=True, 
+    transform=transform
+)
 
-# print(f"VOC 2007 test images downloaded: {len(voc_dataset)}")
+print(f"VOC 2007 test images downloaded: {len(voc_dataset)}")
 
 # Download and load the training data
 voc_dataset = datasets.VOCDetection(
