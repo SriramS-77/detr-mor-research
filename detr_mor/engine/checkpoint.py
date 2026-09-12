@@ -10,7 +10,31 @@ def checkpoint_path(train_config):
     return os.path.join(train_config['task_name'], train_config['ckpt_name'])
 
 
-def save_checkpoint(model, optimizer, scheduler, epoch, loss, steps, path):
+def best_checkpoint_path(train_config):
+    r"""Path the best-validation checkpoint lives at:
+    ``{task_name}/best_{ckpt_name}``."""
+    return os.path.join(train_config['task_name'],
+                        'best_' + train_config['ckpt_name'])
+
+
+def read_min_val_loss(path, map_location='cpu'):
+    r"""
+    Recover the ``min_val_loss`` recorded in an existing best checkpoint, so a
+    resumed run does not overwrite it with a worse epoch.
+
+    :return: the stored value, or ``inf`` if there is nothing to read
+    """
+    if not os.path.exists(path):
+        return float('inf')
+    checkpoint = torch.load(path, map_location=map_location,
+                            weights_only=False)
+    if not isinstance(checkpoint, dict):
+        return float('inf')
+    return checkpoint.get('min_val_loss', float('inf'))
+
+
+def save_checkpoint(model, optimizer, scheduler, epoch, loss, steps, path,
+                    extra=None):
     r"""
     Write a resumable checkpoint.
 
@@ -18,6 +42,8 @@ def save_checkpoint(model, optimizer, scheduler, epoch, loss, steps, path):
     :param loss: last observed loss (tensor or float), stored for reference
     :param steps: global step counter
     :param path: destination file
+    :param extra: optional dict of additional fields to record alongside the
+        state dicts (e.g. the losses that made this the best epoch)
     """
     os.makedirs(os.path.dirname(path) or '.', exist_ok=True)
     checkpoint = {
@@ -28,6 +54,8 @@ def save_checkpoint(model, optimizer, scheduler, epoch, loss, steps, path):
         'loss': loss.item() if torch.is_tensor(loss) else loss,
         'steps': steps,
     }
+    if extra:
+        checkpoint.update(extra)
     torch.save(checkpoint, path)
     print('Checkpoint saved at epoch {}'.format(epoch))
 

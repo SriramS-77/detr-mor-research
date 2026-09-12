@@ -76,7 +76,7 @@ def main():
     device = resolve_device(args.device)
     print('Using device: {}'.format(device))
 
-    test_loader, voc = build_test_loader(dataset_config)
+    test_loader, voc = build_test_loader(dataset_config, train_config)
 
     # The checkpoint supplies the weights, so there is no point downloading
     # ImageNet weights just to overwrite them.

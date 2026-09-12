@@ -8,8 +8,10 @@ from torch.optim.lr_scheduler import MultiStepLR
 from tqdm import tqdm
 
 from detr_mor.engine.checkpoint import (
+    best_checkpoint_path,
     checkpoint_path,
     load_checkpoint,
+    read_min_val_loss,
     save_checkpoint,
 )
 from detr_mor.utils.misc import batch_images_to_device, targets_to_device
@@ -152,6 +154,11 @@ def train(model, train_loader, val_loader, device, train_config,
     optimizer = build_optimizer(model, train_config)
     lr_scheduler = build_scheduler(optimizer, train_config)
 
+    # Lowest val loss seen so far; read back on resume so a restarted run
+    # cannot overwrite a better epoch's checkpoint with a worse one.
+    best_ckpt_path = best_checkpoint_path(train_config)
+    min_val_loss = read_min_val_loss(best_ckpt_path) if resume else float('inf')
+
     start_epoch = 0
     steps = 0
     if resume and os.path.exists(ckpt_path):
@@ -193,6 +200,21 @@ def train(model, train_loader, val_loader, device, train_config,
         # epoch + 1 so a resumed run starts on the next epoch, not this one again.
         save_checkpoint(model, optimizer, lr_scheduler, epoch + 1, last_loss,
                         steps, ckpt_path)
+
+        # Same format, written to a separate file, only when this epoch is the
+        # best so far. The rolling checkpoint above still drives resume.
+        val_loss = val_cls_loss + val_loc_loss
+        if val_loss < min_val_loss:
+            min_val_loss = val_loss
+            save_checkpoint(model, optimizer, lr_scheduler, epoch + 1,
+                            last_loss, steps, best_ckpt_path,
+                            extra={'min_val_loss': min_val_loss,
+                                   'train_cls_loss': train_cls_loss,
+                                   'train_loc_loss': train_loc_loss,
+                                   'val_cls_loss': val_cls_loss,
+                                   'val_loc_loss': val_loc_loss})
+            print('New best val loss {:.4f}, saved to {}'.format(
+                min_val_loss, best_ckpt_path))
 
     with open(result_path, 'a') as log:
         log.write('Done Training...\n')

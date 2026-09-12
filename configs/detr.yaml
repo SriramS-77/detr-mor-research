@@ -1,0 +1,50 @@
+# Plain DETR on Pascal VOC.
+#
+# Point train_im_sets / test_im_sets at your VOCdevkit directories. Each entry must be a
+# VOC-style root containing ImageSets/Main/{trainval,test}.txt, Annotations/ and JPEGImages/.
+# Original paths from the GPU machine:
+#   train_im_sets: ['/scratch/abhilashk/Pascal-VOC/VOCdevkit/VOC2007',
+#                   '/scratch/abhilashk/Pascal-VOC/VOCdevkit/VOC2012']
+#   test_im_sets:  ['/scratch/abhilashk/Pascal-VOC/VOCdevkit/VOC2007']
+dataset_params:
+  train_im_sets: ['data/VOCdevkit/VOC2007', 'data/VOCdevkit/VOC2012']
+  test_im_sets: ['data/VOCdevkit/VOC2007']
+  num_classes : 21
+  bg_class_idx : 0
+  im_size : 640
+
+model_params:
+  im_channels : 3
+  backbone_channels : 512
+  d_model : 256
+  num_queries : 25
+  freeze_backbone : True
+  encoder_layers : 8
+  encoder_attn_heads : 8
+  decoder_layers : 8
+  decoder_attn_heads : 8
+  dropout_prob : 0.1
+  ff_inner_dim : 2048
+  cls_cost_weight : 1.
+  l1_cost_weight : 5.
+  giou_cost_weight : 2.
+  bg_class_weight : 0.1
+  nms_threshold : 0.5
+
+
+train_params:
+  task_name: 'detr_voc_results'
+  eval_score_threshold: 0.0
+  infer_score_threshold: 0.5
+  use_nms_eval : False
+  use_nms_infer : True
+  seed: 1111
+  acc_steps: 1
+  num_epochs: 150
+  batch_size: 80
+  lr_steps: [ 125 ]
+  lr: 0.0001
+  log_steps : 500
+  ckpt_name: 'detr.pth'
+  # Fraction of the train imageset held out for per-epoch validation.
+  val_split: 0.2
