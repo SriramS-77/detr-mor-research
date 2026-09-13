@@ -63,6 +63,9 @@ train_params:
   seed: 1111
   acc_steps: 1
   num_epochs: 1 #150
+  # Per process under torchrun, so the effective batch is
+  # batch_size * nproc_per_node. Halve it to keep the effective batch
+  # unchanged when moving from 1 GPU to 2.
   batch_size: 4
   lr_steps: [ 200 ]
   lr: 0.0001
