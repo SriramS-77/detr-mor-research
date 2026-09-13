@@ -1,6 +1,7 @@
 """Training and validation loops."""
 
 import os
+from collections import Counter
 
 import numpy as np
 import torch
@@ -34,6 +35,46 @@ def build_scheduler(optimizer, train_config):
     return MultiStepLR(optimizer,
                        milestones=train_config['lr_steps'],
                        gamma=0.1)
+
+
+def reconcile_schedule(optimizer, scheduler, train_config):
+    r"""
+    Re-apply the config's LR policy after a checkpoint restore.
+
+    ``load_state_dict`` restores ``lr``, ``initial_lr``, ``milestones``,
+    ``gamma`` and ``base_lrs`` alongside the state that genuinely has to survive
+    a resume (Adam's moment estimates, ``last_epoch``, ``_step_count``). That
+    makes the config silently inert: editing ``lr`` or ``lr_steps`` has no
+    effect on a resumed run. Here the config owns *policy* (where the run is
+    going) and the checkpoint keeps *position* (how far it has got).
+
+    The current LR is recomputed in closed form, ``lr * gamma ** passed``, so a
+    milestone already behind ``last_epoch`` is applied rather than skipped -
+    MultiStepLR itself only ever fires on the exact epoch it lands on.
+
+    :param train_config: config['train_params']; reads 'lr' and 'lr_steps'
+    :return: list of descriptions of what the config changed, empty if nothing
+    """
+    lr = train_config['lr']
+    milestones = sorted(train_config['lr_steps'])
+    changes = []
+
+    restored = sorted(scheduler.milestones.elements())
+    if restored != milestones:
+        changes.append('lr_steps {} -> {}'.format(restored, milestones))
+    scheduler.milestones = Counter(milestones)
+
+    if scheduler.base_lrs and scheduler.base_lrs[0] != lr:
+        changes.append('lr {:g} -> {:g}'.format(scheduler.base_lrs[0], lr))
+    scheduler.base_lrs = [lr] * len(optimizer.param_groups)
+
+    passed = sum(1 for m in milestones if m <= scheduler.last_epoch)
+    current = lr * scheduler.gamma ** passed
+    for group in optimizer.param_groups:
+        group['initial_lr'] = lr
+        group['lr'] = current
+    scheduler._last_lr = [current] * len(optimizer.param_groups)
+    return changes
 
 
 def train_one_epoch(model, loader, optimizer, scheduler, device, train_config,
@@ -165,6 +206,13 @@ def train(model, train_loader, val_loader, device, train_config,
         print('Loading checkpoint as one exists at {}'.format(ckpt_path))
         start_epoch, steps = load_checkpoint(ckpt_path, model, optimizer,
                                              lr_scheduler, map_location=device)
+        # The checkpoint carries the old schedule; the config is authoritative.
+        changes = reconcile_schedule(optimizer, lr_scheduler, train_config)
+        if changes:
+            print('Config overrides the restored schedule: {}'.format(
+                '; '.join(changes)))
+        print('Resuming at epoch {} with lr {:g}'.format(
+            start_epoch + 1, lr_scheduler.get_last_lr()[0]))
 
     num_epochs = train_config['num_epochs']
     last_loss = 0.0

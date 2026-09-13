@@ -62,9 +62,9 @@ train_params:
   use_nms_infer : True
   seed: 1111
   acc_steps: 1
-  num_epochs: 300
-  batch_size: 16
-  lr_steps: [ 200 ]
+  num_epochs: 150
+  batch_size: 128
+  lr_steps: [ 125 ]
   lr: 0.0001
   log_steps : 500
   ckpt_name: 'mor_sequential_detr.pth'

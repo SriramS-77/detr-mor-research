@@ -8,6 +8,8 @@ voc/
 mor_voc/
 smoke_test_run/
 samples/
+[a-z]*_samples/
+[a-z]*_results/
 *.pth
 
 # Datasets
