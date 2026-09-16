@@ -1,0 +1,53 @@
+dataset_params:
+  train_im_sets: ['data/VOCdevkit/VOC2007', 'data/VOCdevkit/VOC2012']
+  test_im_sets: ['data/VOCdevkit/VOC2007']
+  num_classes : 21
+  bg_class_idx : 0
+  im_size : 640
+
+model_params:
+  im_channels : 3
+  backbone_channels : 512
+  d_model : 256
+  num_queries : 25
+  freeze_backbone : True
+  # encoder_num_recursions : 3
+  encoder_num_blocks : 1
+  # encoder_recursion_type : 'cyclic'
+  encoder_attn_heads : 8
+  # decoder_num_recursions : 3
+  decoder_num_blocks : 6
+  # decoder_recursion_type : 'cyclic'
+  decoder_attn_heads : 8
+  dropout_prob : 0.1
+  ff_inner_dim : 2048
+  cls_cost_weight : 1.
+  l1_cost_weight : 5.
+  giou_cost_weight : 2.
+  bg_class_weight : 0.1
+  nms_threshold : 0.5
+
+
+train_params:
+  task_name: 'rt_detr_voc_results'
+  eval_score_threshold: 0.0
+  infer_score_threshold: 0.5
+  use_nms_eval : False
+  use_nms_infer : True
+  seed: 1111
+  acc_steps: 1
+  num_epochs: 150
+  batch_size: 80
+  lr_steps: [ 125 ]
+  lr: 0.0001
+  log_steps : 500
+  ckpt_name: 'rt_detr.pth'
+  # Fraction of the train imageset held out for per-epoch validation.
+  val_split: 0.2
+  # DataLoader worker processes. Augmentation is CPU-bound per image, so
+  # workers keep the GPU fed. Forced to 0 in a Windows notebook, where spawn
+  # cannot pickle VOCDataset out of __main__; honoured on Linux / Kaggle.
+  num_workers: 4
+  # Max grad norm. DETR-family training is normally clipped at 0.1; deformable
+  # sampling offsets are the usual source of a spike. Set to 0 to disable.
+  grad_clip: 0.1
