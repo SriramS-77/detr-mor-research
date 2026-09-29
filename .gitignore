@@ -10,7 +10,9 @@ smoke_test_run/
 samples/
 [a-z]*_samples/
 [a-z]*_results/
+[a-z]*_results_[0-9]*/
 *.pth
+*.bak
 
 # Datasets
 data/

@@ -65,8 +65,12 @@ def compute_map(det_boxes, gt_boxes, iou_threshold=0.5, method='area',
     :param method: 'area' for the all-point interpolated AP, 'interp' for the
         11-point VOC2007 metric
     :param difficult: same structure as gt_boxes, holding the VOC 'difficult'
-        flag per box. Difficult boxes are removed from the recall denominator.
-    :return: (mean_ap, {class_name: ap})
+        flag per box. Difficult boxes are excluded from the metric on BOTH
+        sides: they do not count toward the recall denominator, and a detection
+        that lands on one is discarded rather than scored either way. Pass None
+        to score every box.
+    :return: (mean_ap, {class_name: ap}); a class with no scorable ground truth
+        gets NaN and is left out of the mean.
     """
     gt_labels = {cls_key for im_gt in gt_boxes for cls_key in im_gt.keys()}
     gt_labels = sorted(gt_labels)
@@ -96,44 +100,81 @@ def compute_map(det_boxes, gt_boxes, iou_threshold=0.5, method='area',
         gt_matched = [[False for _ in im_gts[label]] for im_gts in gt_boxes]
         # Number of gt boxes for this class for recall calculation
         num_gts = sum([len(im_gts[label]) for im_gts in gt_boxes])
-        num_difficults = sum([sum(difficults_label[label])
-                              for difficults_label in difficult])
 
-        tp = [0] * len(cls_dets)
-        fp = [0] * len(cls_dets)
+        # VOC 'difficult' flags per image, aligned with gt_boxes[im][label]
+        if difficult is not None:
+            is_difficult = [difficults_label[label]
+                            for difficults_label in difficult]
+        else:
+            is_difficult = [[0] * len(im_gts[label]) for im_gts in gt_boxes]
+        num_difficults = sum([sum(flags) for flags in is_difficult])
+        # Only the non-difficult boxes are on the hook for recall
+        num_scored_gts = num_gts - num_difficults
+
+        # Appended to rather than preallocated: a detection that lands on a
+        # difficult box is dropped from the ranked list entirely, so these end
+        # up shorter than cls_dets.
+        tp = []
+        fp = []
 
         # For each prediction
-        for det_idx, (im_idx, det_pred) in enumerate(cls_dets):
+        for im_idx, det_pred in cls_dets:
             # Get gt boxes for this image and this label
             im_gts = gt_boxes[im_idx][label]
 
             max_iou_found = -1
             max_iou_gt_idx = -1
 
-            # Get best matching gt box
+            # Get best matching gt box. Difficult boxes stay in this argmax: a
+            # detection sitting on a difficult object has to be recognised as
+            # such before it can be excused.
             for gt_box_idx, gt_box in enumerate(im_gts):
                 gt_box_iou = get_iou(det_pred[:-1], gt_box)
                 if gt_box_iou > max_iou_found:
                     max_iou_found = gt_box_iou
                     max_iou_gt_idx = gt_box_idx
-            # TP only if iou >= threshold and this gt has not yet been matched
-            if max_iou_found >= iou_threshold:
-                if not gt_matched[im_idx][max_iou_gt_idx]:
-                    # If tp then we set this gt box as matched
-                    gt_matched[im_idx][max_iou_gt_idx] = True
-                    tp[det_idx] = 1
-                else:
-                    fp[det_idx] = 1
+
+            if max_iou_found < iou_threshold:
+                # Matches nothing -> false positive
+                tp.append(0)
+                fp.append(1)
+            elif is_difficult[im_idx][max_iou_gt_idx]:
+                # Landed on a box VOC marks 'difficult'. The protocol ignores
+                # these: not credited as a hit, not penalised as a mistake, and
+                # the gt is left unmatched so it can absorb further detections.
+                #
+                # Dropping it here is the half that used to be missing:
+                # difficult boxes were removed from the recall DENOMINATOR
+                # while still counting as true positives in the NUMERATOR, so
+                # recall could reach num_gts / (num_gts - num_difficults) > 1
+                # and the reported AP came out above 1.0.
+                continue
+            elif not gt_matched[im_idx][max_iou_gt_idx]:
+                # If tp then we set this gt box as matched
+                gt_matched[im_idx][max_iou_gt_idx] = True
+                tp.append(1)
+                fp.append(0)
             else:
-                fp[det_idx] = 1
+                # Already found by a higher-scoring detection -> duplicate
+                tp.append(0)
+                fp.append(1)
 
         # Cumulative tp and fp
         tp = np.cumsum(tp)
         fp = np.cumsum(fp)
 
         eps = np.finfo(np.float32).eps
-        recalls = tp / np.maximum(num_gts - num_difficults, eps)
+        recalls = tp / np.maximum(num_scored_gts, eps)
         precisions = tp / np.maximum((tp + fp), eps)
+
+        # Recall is a fraction of the scorable ground truth; it cannot exceed 1.
+        # Assert rather than clip, so any future mismatch between what counts as
+        # a hit and what counts in the denominator fails loudly instead of
+        # quietly reporting an AP above 1.
+        assert recalls.size == 0 or recalls[-1] <= 1.0 + 1e-6, (
+            'recall {:.4f} > 1 for class {}: {} true positives against {} '
+            'scorable ground-truth boxes'.format(
+                float(recalls[-1]), label, int(tp[-1]), num_scored_gts))
 
         if method == 'area':
             recalls = np.concatenate(([0.0], recalls, [1.0]))
@@ -160,11 +201,83 @@ def compute_map(det_boxes, gt_boxes, iou_threshold=0.5, method='area',
             ap = ap / 11.0
         else:
             raise ValueError('Method can only be area or interp')
-        if num_gts > 0:
+        assert ap <= 1.0 + 1e-6, 'AP {:.4f} > 1 for class {}'.format(ap, label)
+
+        # A class whose every ground-truth box is marked difficult has nothing
+        # scorable, so it gets NaN rather than a meaningless 0.
+        if num_scored_gts > 0:
             aps.append(ap)
             all_aps[label] = ap
         else:
             all_aps[label] = np.nan
-    # compute mAP at provided iou threshold
-    mean_ap = sum(aps) / len(aps)
+    # compute mAP at provided iou threshold, over the scorable classes only
+    mean_ap = sum(aps) / len(aps) if aps else np.nan
     return mean_ap, all_aps
+
+
+# The ten IoU thresholds COCO averages over: 0.50, 0.55, ..., 0.95. Written out
+# by construction rather than via np.arange(0.5, 1.0, 0.05), because the latter
+# depends on floating-point rounding for whether it yields ten values or eleven.
+COCO_IOU_THRESHOLDS = tuple(round(0.5 + 0.05 * step, 2) for step in range(10))
+
+
+def _nanmean(values):
+    r"""Mean over the non-NaN entries; NaN when there are none."""
+    kept = [value for value in values if value == value]
+    return sum(kept) / len(kept) if kept else float('nan')
+
+
+def compute_coco_map(det_boxes, gt_boxes, difficult=None, method='area',
+                     iou_thresholds=COCO_IOU_THRESHOLDS):
+    r"""
+    COCO-style AP: :func:`compute_map` evaluated at several IoU thresholds and
+    averaged, alongside the individual AP50 and AP75 numbers.
+
+    Detections are collected once by the caller and re-scored at each threshold,
+    so the sweep costs ten cheap matching passes, not ten forward passes.
+
+    Note this is COCO-style only in the IoU sweep. The precision-recall curve is
+    still integrated the VOC way ('area' = all-point, or 'interp' = 11-point);
+    COCO itself uses a 101-point grid, and also applies a 100-detection cap and
+    reports small/medium/large breakdowns, none of which are done here.
+
+    :param det_boxes: list over images of ``{class_name: [[x1,y1,x2,y2,score]]}``
+    :param gt_boxes: list over images of ``{class_name: [[x1,y1,x2,y2]]}``
+    :param difficult: VOC 'difficult' flags, as :func:`compute_map` takes them
+    :param method: 'area' or 'interp', passed through to :func:`compute_map`
+    :param iou_thresholds: thresholds to average over; defaults to COCO's ten
+    :return: dict with 'ap' (the average over thresholds), 'ap50', 'ap75',
+        'class_ap' (per class, averaged the same way) and 'per_iou' keyed by
+        threshold. Every value is a float, NaN where nothing was scorable.
+    """
+    per_iou = {}
+    for iou_threshold in iou_thresholds:
+        mean_ap, all_aps = compute_map(det_boxes, gt_boxes,
+                                       iou_threshold=iou_threshold,
+                                       method=method, difficult=difficult)
+        per_iou[iou_threshold] = {'mean_ap': float(mean_ap),
+                                  'class_ap': {name: float(ap)
+                                               for name, ap in all_aps.items()}}
+
+    # Whether a class is scorable depends only on its ground truth, not on the
+    # threshold, so the label set is the same at every threshold. Taking the
+    # union anyway keeps this correct if that ever stops being true.
+    labels = sorted({name for result in per_iou.values()
+                     for name in result['class_ap']})
+    class_ap = {
+        name: _nanmean([result['class_ap'].get(name, float('nan'))
+                        for result in per_iou.values()])
+        for name in labels
+    }
+
+    def _at(threshold):
+        result = per_iou.get(threshold)
+        return result['mean_ap'] if result is not None else float('nan')
+
+    return {
+        'ap': _nanmean([result['mean_ap'] for result in per_iou.values()]),
+        'ap50': _at(0.5),
+        'ap75': _at(0.75),
+        'class_ap': class_ap,
+        'per_iou': per_iou,
+    }

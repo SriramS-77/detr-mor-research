@@ -88,6 +88,27 @@ def load_images_and_anns(im_sets, label2idx, ann_fname, split,
     return im_infos
 
 
+def _sanitize_labels_getter(transform_input):
+    r"""
+    Pull the label tensor out of a ``(image, targets)`` pair for
+    :class:`~torchvision.transforms.v2.SanitizeBoundingBoxes`, which needs to
+    drop the labels of any box its sanitisation removes.
+
+    This is deliberately a module-level function and NOT the lambda it replaces.
+    The transform is stored on the dataset instance, and a DataLoader with
+    ``num_workers > 0`` pickles the dataset to hand it to each worker under the
+    'spawn' start method - the default on Windows and macOS. A lambda defined
+    inside ``__init__`` is a local object and cannot be pickled, so every script
+    that builds a loader with workers died on those platforms with
+    ``PicklingError: Can't pickle local object VOCDataset.__init__.<locals>.
+    <lambda>``. Linux defaults to 'fork', pickles nothing, and hid the bug.
+
+    :param transform_input: the ``(image, targets)`` tuple passed to the Compose
+    :return: the (N,) label tensor
+    """
+    return transform_input[1]['labels']
+
+
 class VOCDataset(Dataset):
     r"""
     Pascal VOC detection dataset.
@@ -124,8 +145,7 @@ class VOCDataset(Dataset):
                 torchvision.transforms.v2.RandomPhotometricDistort(),
                 torchvision.transforms.v2.Resize(size=(self.im_size, self.im_size)),
                 torchvision.transforms.v2.SanitizeBoundingBoxes(
-                    labels_getter=lambda transform_input:
-                    transform_input[1]["labels"]),
+                    labels_getter=_sanitize_labels_getter),
                 torchvision.transforms.v2.ToPureTensor(),
                 torchvision.transforms.v2.ToDtype(torch.float32, scale=True),
                 torchvision.transforms.v2.Normalize(mean=self.imagenet_mean,

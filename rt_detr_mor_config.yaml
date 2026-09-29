@@ -33,9 +33,26 @@ model_params:
   encoder_num_blocks : 1
   # encoder_recursion_type : 'cyclic'
   encoder_attn_heads : 8
-  # decoder_num_recursions : 3
+  # ---- MoR decoder ----
+  # decoder_num_blocks is the SHARED recursion cycle, applied
+  # decoder_num_recursions times. Blocks inside the cycle reuse one set of
+  # weights, so effective depth exceeds parameter cost:
+  #   effective depth = dense_first + decoder_num_blocks * decoder_num_recursions
+  #                     + dense_last
+  #   parameter cost  = dense_first + decoder_num_blocks + dense_last
+  # 2 x 3 gives the 6-layer baseline's depth for a third of its decoder
+  # parameters, and the shrinking router budget (25 -> 16 -> 8 matching
+  # queries) cuts decoder FLOPs on top of that.
   decoder_num_blocks : 2
-  # decoder_recursion_type : 'cyclic'
+  decoder_num_recursions : 3
+  # Unshared blocks OUTSIDE the cycle that always run over every query.
+  # Both True is the MoR paper's Middle-Cycle layout: the opening block gives
+  # every query a full representation before the first routing decision, and
+  # the closing block re-mixes queries that exited early so the class head does
+  # not read features several recursions stale. Both False recurses everything,
+  # which amortises best but leaves the final state a sparse pass.
+  decoder_dense_first : False
+  decoder_dense_last : False
   decoder_attn_heads : 8
   dropout_prob : 0.1
   ff_inner_dim : 1024
@@ -71,7 +88,7 @@ model_params:
 
 
 train_params:
-  task_name: 'rt_detr_voc_results'
+  task_name: 'rt_detr_mor_voc_results'
   eval_score_threshold: 0.0
   infer_score_threshold: 0.5
   use_nms_eval : False
@@ -81,6 +98,11 @@ train_params:
   num_epochs: 72
   batch_size: 24
   lr_steps: [ 60 ]
+  # NOTE: the training loop sums the per-stage losses without normalising, so
+  # the total scales with decoder.num_outputs. This layout has 3 decoder terms
+  # against the dense baseline's 6, which roughly halves the total loss and
+  # hence the effective step size. Keep that in mind when comparing the first
+  # MoR run against rt_detr_config.yaml - part of any gap is this, not routing.
   lr: 0.0001
   # Learning rate for backbone.* only, applied as its own AdamW param group.
   # The backbone is pretrained and the detector is not, so one rate for both
@@ -89,7 +111,7 @@ train_params:
   # rate. Ignored while freeze_backbone is True (the group is then empty).
   backbone_lr: 0.00001
   log_steps : 500
-  ckpt_name: 'rt_detr.pth'
+  ckpt_name: 'rt_detr_mor.pth'
   # Fraction of the train imageset held out for per-epoch validation.
   val_split: 0.2
   # DataLoader worker processes. Augmentation is CPU-bound per image, so

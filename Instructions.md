@@ -41,6 +41,31 @@ Downloads the 2007 trainval, 2007 test and 2012 trainval datasets into `data/VOC
 Images with more than 25 objects are skipped, because `num_queries` is 25. On VOC this
 drops about 15 images.
 
+# Normal DETR
+
+## Train
+
+```bash
+python scripts/train.py    --config configs/detr.yaml --model detr --device cuda
+```
+
+Flags:
+`--device cuda:1`, `--no-resume` (ignore an existing checkpoint), `--no-pretrained`,
+`--ckpt path/to/other.pth`. Change device to the correct cuda index.
+
+Training writes `{task_name}/{ckpt_name}` after every epoch and appends a line per epoch
+to `{task_name}/train_results.txt`. Re-running `train.py` resumes from that checkpoint
+automatically, restoring model, optimizer, scheduler, epoch and step count.
+
+## Evaluate
+
+```bash
+python scripts/evaluate.py    --config configs/detr.yaml --model detr --device cuda
+```
+
+`evaluate.py` writes `{task_name}/eval_results.json` (mAP, per-class AP, and the
+settings used); `--out other.json` moves it, `--out none` skips it.
+
 # Cyclic Recursion Method
 
 Under `cyclic` method, a routing decision covers a **whole pass** through the middle group (all the middle encoder/decoder blocks), which is the granularity MoR is defined at — a token either recurses again in full or stops. Raise `num_recursions` (not `num_blocks`) to route more often.

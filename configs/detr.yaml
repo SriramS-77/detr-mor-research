@@ -33,7 +33,7 @@ model_params:
 
 
 train_params:
-  task_name: 'detr_voc_results'
+  task_name: 'detr_voc_results/detr_voc_results_300'
   eval_score_threshold: 0.0
   infer_score_threshold: 0.5
   use_nms_eval : False
@@ -48,6 +48,6 @@ train_params:
   lr_steps: [ 125 ]
   lr: 0.0001
   log_steps : 500
-  ckpt_name: 'detr.pth'
+  ckpt_name: 'best_detr.pth'
   # Fraction of the train imageset held out for per-epoch validation.
   val_split: 0.2

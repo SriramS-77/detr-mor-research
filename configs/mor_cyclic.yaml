@@ -55,7 +55,7 @@ model_params:
 
 
 train_params:
-  task_name: 'mor_cyclic_voc_results'
+  task_name: 'mor_cyclic_voc_results/mor_cyclic_voc_results_300'
   eval_score_threshold: 0.0
   infer_score_threshold: 0.5
   use_nms_eval : False
@@ -66,10 +66,10 @@ train_params:
   # Per process under torchrun, so the effective batch is
   # batch_size * nproc_per_node. Halve it to keep the effective batch
   # unchanged when moving from 1 GPU to 2.
-  batch_size: 80
+  batch_size: 8
   lr_steps: [ 125 ]
   lr: 0.0001
   log_steps : 500
-  ckpt_name: 'mor_cyclic_detr.pth'
+  ckpt_name: 'best_mor_cyclic_detr.pth'
   # Fraction of the train imageset held out for per-epoch validation.
   val_split: 0.2
