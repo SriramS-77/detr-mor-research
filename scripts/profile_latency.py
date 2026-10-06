@@ -28,6 +28,11 @@ Example (on a Kaggle T4)::
 
     python scripts/profile_latency.py --config rt_detr_config.yaml \
         --sizes 640 960 1280 --num-queries 25 300 --fp16
+
+``--flops`` counts GFLOPs per stage instead (hardware-independent, so CPU is
+fine; 2 FLOPs per multiply-add), next to the per-stage parameter counts.
+``--set csp_expansion=0.5`` overrides model_params entries, e.g. to match the
+official RT-DETR neck.
 """
 
 import argparse
@@ -48,27 +53,166 @@ STAGES = ('backbone', 'input_proj', 'aifi', 'ccfm', 'query_select', 'decoder',
           'heads_post')
 
 
+#: Which of the model's top-level submodules make up each stage. Shared by the
+#: parameter and FLOP breakdowns so the two tables always agree.
+STAGE_MODULES = {
+    'backbone': ('backbone',),
+    'input_proj': ('backbone_proj',),
+    'aifi': ('s5_encoder',),
+    'ccfm': ('up_sampling', 'down_sampling', 'rep_blocks_up', 'rep_blocks_down'),
+    'query_select': ('enc_output', 'enc_class_head', 'enc_bbox_head'),
+    'decoder': ('decoder', 'ref_to_query_embed'),
+    'heads_post': ('class_heads',),
+}
+
+
+#: Modules the model hands to another stage module and that run *inside* its
+#: forward (the decoder calls ref_to_query_embed as ``query_pos_head``). The
+#: FLOP tracker already includes them in that caller, so they are skipped when
+#: summing FLOPs; their parameters still count towards their stage.
+_CALLED_INSIDE_OTHERS = ('ref_to_query_embed',)
+
+
 def count_params(module):
     return sum(p.numel() for p in module.parameters())
 
 
 def param_breakdown(model):
     r"""Parameters per stage, in millions."""
-    groups = {
-        'backbone': [model.backbone],
-        'input_proj': [model.backbone_proj],
-        'aifi': [model.s5_encoder],
-        'ccfm': [model.up_sampling, model.down_sampling, model.rep_blocks_up,
-                 model.rep_blocks_down],
-        'query_select': [model.enc_output, model.enc_class_head,
-                         model.enc_bbox_head],
-        'decoder': [model.decoder, model.ref_to_query_embed],
-        'heads_post': [model.class_heads],
-    }
-    out = {name: sum(count_params(m) for m in mods) / 1e6
-           for name, mods in groups.items()}
+    out = {name: sum(count_params(getattr(model, attr)) for attr in attrs) / 1e6
+           for name, attrs in STAGE_MODULES.items()}
     out['total'] = count_params(model) / 1e6
     return out
+
+
+def _stage_of(fqn, root):
+    r"""Stage a FlopCounterMode module name ('DETR.decoder.attns.0') belongs to."""
+    parts = fqn.split('.')
+    if len(parts) < 2 or parts[0] != root:
+        return None
+    for stage, attrs in STAGE_MODULES.items():
+        if parts[1] in attrs:
+            return stage
+    return None
+
+
+@torch.no_grad()
+def flop_breakdown(model, size, device):
+    r"""
+    GFLOPs per stage for one batch-1 forward at ``size`` x ``size``.
+
+    Matmul / conv FLOPs come from ``torch.utils.flop_counter.FlopCounterMode``
+    (2 FLOPs per multiply-add). Its module tracker reports every level of the
+    hierarchy, parents including children, so only the top-most entry under
+    each stage is summed.
+
+    Two things the counter does not see are handled explicitly:
+
+    * ``nn.MultiheadAttention`` runs its score / weighted-sum matmuls in a
+      fused kernel with no FLOP formula, so only its projections are counted.
+      ``4 * L * S * E`` per call is added analytically (Q K^T and A V).
+    * The deformable-attention bilinear sampling (grid_sample) is not counted;
+      its arithmetic is negligible (it is memory-bound), so it is left out.
+
+    :return: {stage: GFLOPs, 'decoder.value_proj': GFLOPs, 'total': GFLOPs}
+    """
+    from torch.utils.flop_counter import FlopCounterMode
+
+    root = type(model).__name__
+    attn_flops = {}
+    handles = []
+    for name, module in model.named_modules():
+        if isinstance(module, torch.nn.MultiheadAttention):
+            def hook(mod, args, kwargs, name=name):
+                query = kwargs.get('query', args[0] if args else None)
+                key = kwargs.get('key', args[1] if len(args) > 1 else None)
+                if mod.batch_first:
+                    batch, length, embed = query.shape
+                    source = key.shape[1]
+                else:
+                    length, batch, embed = query.shape
+                    source = key.shape[0]
+                attn_flops[name] = (attn_flops.get(name, 0)
+                                    + 4 * batch * length * source * embed)
+            handles.append(module.register_forward_pre_hook(hook,
+                                                            with_kwargs=True))
+
+    x = torch.randn(1, 3, size, size, device=device)
+    try:
+        with FlopCounterMode(display=False) as counter:
+            model(x)
+    finally:
+        for handle in handles:
+            handle.remove()
+
+    counts = {fqn: sum(ops.values())
+              for fqn, ops in counter.get_flop_counts().items()}
+    out = {stage: 0.0 for stage in STAGE_MODULES}
+    for fqn, flops in counts.items():
+        stage = _stage_of(fqn, root)
+        if stage is None or fqn.split('.')[1] in _CALLED_INSIDE_OTHERS:
+            continue
+        # Skip anything with ANY counted ancestor in the same stage. Checking
+        # only the immediate parent double-counts children of never-called
+        # containers (nn.ModuleList), which never appear as keys themselves.
+        parts = fqn.split('.')
+        ancestors = ('.'.join(parts[:i]) for i in range(2, len(parts)))
+        if any(a in counts and _stage_of(a, root) == stage for a in ancestors):
+            continue
+        out[stage] += flops
+
+    # Every counted FLOP lives under exactly one stage or in root-level code,
+    # so the stage sum can never exceed the counter's own total.
+    global_flops = counts.get('Global', 0)
+    assert sum(out.values()) <= global_flops * (1 + 1e-9), (
+        'stage FLOPs {} exceed the global total {}: something is double '
+        'counted'.format(sum(out.values()), global_flops))
+    unattributed = global_flops - sum(out.values())
+    for name, flops in attn_flops.items():
+        stage = _stage_of('{}.{}'.format(root, name), root)
+        if stage is not None:
+            out[stage] += flops
+
+    value_proj = sum(flops for fqn, flops in counts.items()
+                     if _stage_of(fqn, root) == 'decoder'
+                     and fqn.endswith('value_proj'))
+    result = {stage: flops / 1e9 for stage, flops in out.items()}
+    result['decoder.value_proj'] = value_proj / 1e9
+    # FLOPs in the model's own forward outside any stage module (should be
+    # ~0: flatten / top-k / gather carry no matmul FLOPs).
+    result['unattributed'] = unattributed / 1e9
+    result['total'] = (sum(out.values()) + unattributed) / 1e9
+    return result
+
+
+def print_flop_tables(rows, sizes):
+    r"""Params (constant) next to GFLOPs per resolution, per stage."""
+    for num_queries in sorted({row['num_queries'] for row in rows}):
+        subset = {row['size']: row for row in rows
+                  if row['num_queries'] == num_queries}
+        params = next(iter(subset.values()))['params_m']
+        print('\nnum_queries={}  -  params are resolution-independent; '
+              'GFLOPs (share of total) per input size'.format(num_queries))
+        header = '  {:18s} {:>8s}'.format('stage', 'params M')
+        for size in sizes:
+            header += ' {:>15s}'.format('{}px'.format(size))
+        print(header)
+        for stage in STAGES + ('decoder.value_proj', 'unattributed', 'total'):
+            line = '  {:18s} {:>8s}'.format(
+                stage, '{:.2f}'.format(params[stage])
+                if stage in params else '')
+            for size in sizes:
+                gflops = subset[size]['gflops']
+                share = 100 * gflops[stage] / gflops['total']
+                line += ' {:>15s}'.format('{:7.2f} ({:4.1f}%)'.format(
+                    gflops[stage], share))
+            print(line)
+        line = '  {:18s} {:>8s}'.format('tokens S3/S4/S5', '')
+        for size in sizes:
+            tokens = subset[size]['tokens']
+            line += ' {:>15s}'.format('{}/{}/{}'.format(
+                tokens['S3'], tokens['S4'], tokens['S5']))
+        print(line)
 
 
 class StageTimer:
@@ -171,6 +315,14 @@ def parse_args():
                         help='autocast to fp16 on CUDA')
     parser.add_argument('--no-deploy', action='store_true',
                         help='skip RepVGG / BN fusion')
+    parser.add_argument('--flops', action='store_true',
+                        help='count GFLOPs per stage instead of timing; '
+                             'hardware-independent, so CPU is fine. Counts '
+                             '2 FLOPs per multiply-add (many detection papers '
+                             'count 1, i.e. report MACs)')
+    parser.add_argument('--set', nargs='+', default=[], metavar='KEY=VALUE',
+                        help='override model_params entries, e.g. '
+                             'csp_expansion=0.5 (values parsed as YAML)')
     parser.add_argument('--out', default=None,
                         help='write the results as JSON here')
     return parser.parse_args()
@@ -187,11 +339,17 @@ def main():
     with open(args.config, encoding='utf-8') as handle:
         config = yaml.safe_load(handle)
     base_model_config = dict(config['model_params'], pretrained_backbone=False)
+    for item in args.set:
+        key, _, value = item.partition('=')
+        if key not in base_model_config:
+            raise KeyError('--set {}: not a model_params key'.format(key))
+        base_model_config[key] = yaml.safe_load(value)
     num_classes = config['dataset_params']['num_classes']
 
-    print('Device: {}{}  |  notebook: {}  |  config: {}  |  fp16: {}'.format(
+    print('Device: {}{}  |  notebook: {}  |  config: {}{}  |  fp16: {}'.format(
         device, ' ({})'.format(torch.cuda.get_device_name(device))
         if device.type == 'cuda' else '', args.notebook, args.config,
+        '  |  overrides: {}'.format(' '.join(args.set)) if args.set else '',
         args.fp16 and device.type == 'cuda'))
 
     results = []
@@ -206,10 +364,15 @@ def main():
         params = param_breakdown(model)
 
         for size in args.sizes:
-            times = profile(model, device, size, args.iters, args.warmup,
-                            args.fp16)
             tokens = {'S3': (size // 8) ** 2, 'S4': (size // 16) ** 2,
                       'S5': (size // 32) ** 2}
+            if args.flops:
+                results.append({'num_queries': num_queries, 'size': size,
+                                'tokens': tokens, 'params_m': params,
+                                'gflops': flop_breakdown(model, size, device)})
+                continue
+            times = profile(model, device, size, args.iters, args.warmup,
+                            args.fp16)
             results.append({'num_queries': num_queries, 'size': size,
                             'tokens': tokens, 'ms': times, 'params_m': params})
 
@@ -228,10 +391,15 @@ def main():
         if device.type == 'cuda':
             torch.cuda.empty_cache()
 
-    print('\nKill criterion 1 - encoder+neck (aifi+ccfm) share of latency:')
+    metric = 'gflops' if args.flops else 'ms'
+    if args.flops:
+        print_flop_tables(results, args.sizes)
+    print('\nKill criterion 1 - encoder+neck (aifi+ccfm) share of {}:'.format(
+        'GFLOPs' if args.flops else 'latency'))
     for num_queries in sorted({r['num_queries'] for r in results}):
         shares = ['{}px {:.1f}%'.format(
-            r['size'], 100 * (r['ms']['aifi'] + r['ms']['ccfm']) / r['ms']['total'])
+            r['size'],
+            100 * (r[metric]['aifi'] + r[metric]['ccfm']) / r[metric]['total'])
             for r in results if r['num_queries'] == num_queries]
         print('  q={:<4d} {}'.format(num_queries, '  ->  '.join(shares)))
 
@@ -241,7 +409,8 @@ def main():
             os.makedirs(parent, exist_ok=True)
         with open(args.out, 'w', encoding='utf-8') as handle:
             json.dump({'device': str(device), 'notebook': args.notebook,
-                       'config': args.config, 'fp16': args.fp16,
+                       'config': args.config, 'overrides': args.set,
+                       'flops': args.flops, 'fp16': args.fp16,
                        'deploy': not args.no_deploy, 'iters': args.iters,
                        'results': results}, handle, indent=2)
         print('Wrote {}'.format(args.out))
