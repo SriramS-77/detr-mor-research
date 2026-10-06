@@ -1,0 +1,53 @@
+%% Title page for double-blind submission to Neural Computing and Applications.
+%% Upload separately from the anonymised manuscript (main.tex).
+%% Replace every [PLACEHOLDER] before submission.
+\documentclass[pdflatex,iicol,sn-basic,Numbered]{sn-jnl}
+
+\usepackage{amsmath}% sn-jnl calls \allowdisplaybreaks at \begin{document}
+\usepackage{xcolor}
+\newcommand{\ph}[1]{\textcolor{red}{[#1]}}
+
+\begin{document}
+
+\title[Mixture-of-Recursions in Detection Transformers]{Evaluating Mixture-of-Recursions Blocks in Transformer-Based Object Detectors: Query Initialization Determines When Shared Recursive Depth Pays Off}
+
+\author*[1]{\fnm{\ph{First}} \sur{\ph{Author}}}\email{\ph{corresponding.author@institution.edu}}
+
+\author[1]{\fnm{\ph{Second}} \sur{\ph{Author}}}\email{\ph{second.author@institution.edu}}
+
+\affil*[1]{\orgdiv{\ph{Department}}, \orgname{\ph{Organization}}, \orgaddress{\city{\ph{City}}, \country{\ph{Country}}}}
+
+\abstract{Title page for double-blind review. The anonymised manuscript is submitted as a separate file. This page carries the author information, acknowledgements, funding and author contributions, as required by the journal's double-blind policy.}
+
+\keywords{Object detection, Detection transformer, Mixture-of-Recursions, Parameter sharing, Adaptive computation, Query initialization}
+
+\maketitle
+
+\section*{Author information}
+
+\begin{itemize}
+\item \textbf{Corresponding author:} \ph{Full name}, \ph{e-mail address}, ORCID \ph{0000-0000-0000-0000}.
+\item \textbf{Co-author(s):} \ph{Full name}, \ph{affiliation}, ORCID \ph{0000-0000-0000-0000}.
+\end{itemize}
+
+\section*{Acknowledgements}
+\ph{Acknowledge people who assisted with the work but do not qualify as authors, and any computing resources (for example, GPU time) used for training. Delete this section if not applicable.}
+
+\section*{Statements and Declarations}
+
+\bmhead{Funding}
+\ph{Name the funding organizations in full, with grant numbers, or state: ``The authors did not receive support from any organization for the submitted work.''}
+
+\bmhead{Competing interests}
+The authors declare that they have no competing interests. \ph{Confirm or revise.}
+
+\bmhead{Author contributions (CRediT)}
+Conceptualization: \ph{names}; Methodology: \ph{names}; Software: \ph{names}; Investigation: \ph{names}; Formal analysis: \ph{names}; Writing -- original draft: \ph{names}; Writing -- review and editing: \ph{names}; Supervision: \ph{names}. All authors read and approved the final manuscript.
+
+\bmhead{Use of generative AI}
+A large language model was used to help draft the manuscript text and the analysis scripts that compile its tables and figures from the stored evaluation outputs. The authors verified every number, statement and reference and take full responsibility for the content. \ph{Confirm or revise; the same statement appears in the Methods section of the manuscript, as the journal requires.}
+
+\bmhead{Data and code availability}
+PASCAL VOC is publicly available. Code, configurations and evaluation outputs will be released at \ph{repository URL} upon acceptance.
+
+\end{document}
