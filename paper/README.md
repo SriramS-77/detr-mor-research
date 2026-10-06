@@ -49,6 +49,18 @@ For the referee single-column layout, remove `iicol` from `\documentclass`. The 
 - Confirm the "Competing interests" statement and the generative-AI statement. NCA requires LLM use to be documented in Methods.
 - The manuscript says the code will be released on acceptance. Have a repository ready.
 
+## Latency and FPS
+
+`analysis/latency.py` times all seven models end to end, from input to post-processed detections, at 640×640. It also reports encoder and decoder stage times and FPS. It uses random weights: latency doesn't depend on them, and the MoR routers keep a fixed number of tokens per recursion.
+
+- **CPU:**
+
+  ```bash
+  python paper/analysis/latency.py --device cpu --iters 20 --warmup 3 --out paper/analysis/out/latency_cpu.json
+  ```
+
+- **GPU:** run `analysis/latency_gpu.ipynb` on Kaggle or locally. It needs only the code and the configs, no checkpoints or data. It writes `latency_gpu_<gpu>.json` and `profile_rtdetr_<gpu>_*.json`; copy them to `analysis/out/`.
+
 ## Optional: bootstrap confidence intervals (needs a GPU, e.g. Kaggle)
 
 On CPU this takes more than 10 h per checkpoint; on a T4 it takes a few minutes. From the repo root, with the VOC data in `data/`, run one dump per checkpoint.
