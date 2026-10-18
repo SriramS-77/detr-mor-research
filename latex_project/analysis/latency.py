@@ -16,10 +16,10 @@ numbers are pessimistic; the comparison between models is the point.
 Examples::
 
     # CPU
-    python paper/analysis/latency.py --device cpu --threads 8 --iters 30 \
-        --out paper/analysis/out/latency_cpu.json
+    python latex_project/analysis/latency.py --device cpu --threads 8 --iters 30 \
+        --out latex_project/analysis/out/latency_cpu.json
     # GPU, fp32 and fp16, batch 1 and batch 8 throughput
-    python paper/analysis/latency.py --device cuda --precisions fp32 fp16 \
+    python latex_project/analysis/latency.py --device cuda --precisions fp32 fp16 \
         --batch-sizes 1 8 --out latency_gpu.json
 """
 

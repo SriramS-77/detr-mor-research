@@ -10,7 +10,7 @@ are counted as executed.
 
 Example::
 
-    python paper/analysis/complexity_detr.py --out paper/analysis/out/complexity_detr.json
+    python latex_project/analysis/complexity_detr.py --out latex_project/analysis/out/complexity_detr.json
 """
 
 import argparse
@@ -125,7 +125,7 @@ def params(model):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--size', type=int, default=640)
-    parser.add_argument('--out', default='paper/analysis/out/complexity_detr.json')
+    parser.add_argument('--out', default='latex_project/analysis/out/complexity_detr.json')
     args = parser.parse_args()
     torch.manual_seed(0)
     results = {}

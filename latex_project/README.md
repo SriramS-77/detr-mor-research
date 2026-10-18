@@ -56,7 +56,7 @@ For the referee single-column layout, remove `iicol` from `\documentclass`. The 
 - **CPU:**
 
   ```bash
-  python paper/analysis/latency.py --device cpu --iters 20 --warmup 3 --out paper/analysis/out/latency_cpu.json
+  python latex_project/analysis/latency.py --device cpu --iters 20 --warmup 3 --out latex_project/analysis/out/latency_cpu.json
   ```
 
 - **GPU:** run `analysis/latency_gpu.ipynb` on Kaggle or locally. It needs only the code and the configs, no checkpoints or data. It writes `latency_gpu_<gpu>.json` and `profile_rtdetr_<gpu>_*.json`; copy them to `analysis/out/`.
@@ -68,31 +68,31 @@ On CPU this takes more than 10 h per checkpoint; on a T4 it takes a few minutes.
 2-layer baseline:
 
 ```bash
-python paper/analysis/dump_rtdetr_dets.py --name 2L --notebook rt_detr.ipynb --config "rt_detr_all_results/rt_detr_voc_results (2 blocks)/rt_detr_config.yaml" --ckpt "rt_detr_all_results/rt_detr_voc_results (2 blocks)/best_rt_detr.pth" --eval-json "rt_detr_all_results/rt_detr_voc_results (2 blocks)/eval_results.json" --out-dir dets
+python latex_project/analysis/dump_rtdetr_dets.py --name 2L --notebook rt_detr.ipynb --config "rt_detr_all_results/rt_detr_voc_results (2 blocks)/rt_detr_config.yaml" --ckpt "rt_detr_all_results/rt_detr_voc_results (2 blocks)/best_rt_detr.pth" --eval-json "rt_detr_all_results/rt_detr_voc_results (2 blocks)/eval_results.json" --out-dir dets
 ```
 
 6-layer baseline:
 
 ```bash
-python paper/analysis/dump_rtdetr_dets.py --name 6L --notebook rt_detr.ipynb --config "rt_detr_all_results/rt_detr_new_results (6 blocks)/rt_detr_config.yaml" --ckpt "rt_detr_all_results/rt_detr_new_results (6 blocks)/best_rt_detr.pth" --eval-json "rt_detr_all_results/rt_detr_new_results (6 blocks)/eval_results.json" --out-dir dets
+python latex_project/analysis/dump_rtdetr_dets.py --name 6L --notebook rt_detr.ipynb --config "rt_detr_all_results/rt_detr_new_results (6 blocks)/rt_detr_config.yaml" --ckpt "rt_detr_all_results/rt_detr_new_results (6 blocks)/best_rt_detr.pth" --eval-json "rt_detr_all_results/rt_detr_new_results (6 blocks)/eval_results.json" --out-dir dets
 ```
 
 MoR 2×3:
 
 ```bash
-python paper/analysis/dump_rtdetr_dets.py --name 2x3 --notebook rt_detr_mor.ipynb --config rt_detr_mor_config.yaml --ckpt "rt_detr_all_results/rt_detr_mor_voc_results (2 blocks, 3 recursions)/best_rt_detr_mor.pth" --eval-json "rt_detr_all_results/rt_detr_mor_voc_results (2 blocks, 3 recursions)/eval_results.json" --out-dir dets
+python latex_project/analysis/dump_rtdetr_dets.py --name 2x3 --notebook rt_detr_mor.ipynb --config rt_detr_mor_config.yaml --ckpt "rt_detr_all_results/rt_detr_mor_voc_results (2 blocks, 3 recursions)/best_rt_detr_mor.pth" --eval-json "rt_detr_all_results/rt_detr_mor_voc_results (2 blocks, 3 recursions)/eval_results.json" --out-dir dets
 ```
 
 MoR 3×2:
 
 ```bash
-python paper/analysis/dump_rtdetr_dets.py --name 3x2 --notebook rt_detr_mor.ipynb --config "rt_detr_all_results/rt_detr_mor_voc_results (3 blocks, 2 recursions)/rt_detr_mor_config.yaml" --ckpt "rt_detr_all_results/rt_detr_mor_voc_results (3 blocks, 2 recursions)/best_rt_detr_mor.pth" --eval-json "rt_detr_all_results/rt_detr_mor_voc_results (3 blocks, 2 recursions)/eval_results.json" --out-dir dets
+python latex_project/analysis/dump_rtdetr_dets.py --name 3x2 --notebook rt_detr_mor.ipynb --config "rt_detr_all_results/rt_detr_mor_voc_results (3 blocks, 2 recursions)/rt_detr_mor_config.yaml" --ckpt "rt_detr_all_results/rt_detr_mor_voc_results (3 blocks, 2 recursions)/best_rt_detr_mor.pth" --eval-json "rt_detr_all_results/rt_detr_mor_voc_results (3 blocks, 2 recursions)/eval_results.json" --out-dir dets
 ```
 
 Then run the bootstrap. It asserts that it reproduces each stored AP before resampling.
 
 ```bash
-python paper/analysis/bootstrap.py --dets-dir dets --B 1000
+python latex_project/analysis/bootstrap.py --dets-dir dets --B 1000
 ```
 
 Each `dets/<name>.json` must show `"reproduces_stored": true`. If it does not, GPU kernels have shifted the scores; do not use that dump.

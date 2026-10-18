@@ -19,7 +19,7 @@ does not.
 
 Example::
 
-    python paper/analysis/bootstrap.py --dets-dir <dir with 2L.npz 6L.npz 2x3.npz 3x2.npz> \
+    python latex_project/analysis/bootstrap.py --dets-dir <dir with 2L.npz 6L.npz 2x3.npz 3x2.npz> \
         --pairs 2x3:6L 3x2:6L 2x3:2L 6L:2L --B 1000
 """
 

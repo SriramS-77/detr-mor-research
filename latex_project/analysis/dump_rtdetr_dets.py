@@ -8,7 +8,7 @@ eval_results.json before any interval is computed from it.
 
 Example::
 
-    python paper/analysis/dump_rtdetr_dets.py --name 6L \
+    python latex_project/analysis/dump_rtdetr_dets.py --name 6L \
         --notebook rt_detr.ipynb \
         --config "rt_detr_all_results/rt_detr_new_results (6 blocks)/rt_detr_config.yaml" \
         --ckpt "rt_detr_all_results/rt_detr_new_results (6 blocks)/best_rt_detr.pth" \

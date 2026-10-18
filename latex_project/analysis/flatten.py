@@ -1,4 +1,4 @@
-"""Assemble paper/submission/: a single-file manuscript plus support files.
+"""Assemble latex_project/submission/: a single-file manuscript plus support files.
 
 Springer Nature asks for one .tex source, so generated/numbers.tex (all values
 and plot tables) is inlined in place of its \\input. The bibliography stays a
@@ -6,7 +6,7 @@ and plot tables) is inlined in place of its \\input. The bibliography stays a
 
 Example::
 
-    python paper/analysis/flatten.py
+    python latex_project/analysis/flatten.py
 """
 
 import os
