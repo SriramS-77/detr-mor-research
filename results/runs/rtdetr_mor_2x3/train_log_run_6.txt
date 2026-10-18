@@ -1,0 +1,153 @@
+{'dataset_params': {'train_im_sets': ['data/VOCdevkit/VOC2007', 'data/VOCdevkit/VOC2012'], 'test_im_sets': ['data/VOCdevkit/VOC2007'], 'num_classes': 20, 'im_size': 640}, 'model_params': {'im_channels': 3, 'backbone': 'resnet34', 'pretrained_backbone': True, 'd_model': 256, 'num_queries': 25, 'num_top_queries': 100, 'freeze_backbone': False, 'encoder_num_blocks': 1, 'encoder_attn_heads': 8, 'decoder_num_blocks': 2, 'decoder_num_recursions': 3, 'decoder_dense_first': False, 'decoder_dense_last': False, 'decoder_attn_heads': 8, 'dropout_prob': 0.1, 'ff_inner_dim': 1024, 'csp_num_blocks': 3, 'csp_expansion': 1.0, 'num_denoising': 50, 'label_noise_ratio': 0.5, 'box_noise_scale': 1.0, 'cls_cost_weight': 2.0, 'cls_loss_weight': 1.0, 'l1_cost_weight': 5.0, 'giou_cost_weight': 2.0, 'nms_threshold': 0.5, 'vfl_alpha': 0.75, 'vfl_gamma': 2.0}, 'train_params': {'task_name': 'rt_detr_mor_voc_results', 'eval_score_threshold': 0.0, 'infer_score_threshold': 0.5, 'use_nms_eval': False, 'use_nms_infer': True, 'seed': 1111, 'acc_steps': 1, 'num_epochs': 72, 'batch_size': 20, 'lr_steps': [60], 'lr': 0.0001, 'backbone_lr': 1e-05, 'log_steps': 500, 'ckpt_name': 'rt_detr_mor.pth', 'val_split': 0.2, 'num_workers': 2, 'grad_clip': 0.1}}
+Device: cuda
+{0: 'aeroplane', 1: 'bicycle', 2: 'bird', 3: 'boat', 4: 'bottle', 5: 'bus', 6: 'car', 7: 'cat', 8: 'chair', 9: 'cow', 10: 'diningtable', 11: 'dog', 12: 'horse', 13: 'motorbike', 14: 'person', 15: 'pottedplant', 16: 'sheep', 17: 'sofa', 18: 'train', 19: 'tvmonitor'}
+Total 16536 images found
+Windows notebook: forcing num_workers 2 -> 0 (spawn cannot pickle VOCDataset out of __main__). The config value is honoured on Linux / Kaggle.
+Dataset: 16536 images -> 13229 train / 3307 val | batch_size 20 | num_workers 0
+  train transforms: train (augmented)
+  val   transforms: test (resize + normalise only, no augmentation)
+Trainable parameters: 35,346,270 across 266 tensors
+Backbone trainable: 21,267,648 params at lr 1e-05 (detector 14,078,622 at lr 0.0001)
+CDN active (num_denoising=50): train loss includes the denoising terms, val loss does not, so the two are not directly comparable.
+Loading checkpoint as one exists at rt_detr_mor_voc_results\rt_detr_mor.pth
+Resuming at epoch 62 with lr 1e-05
+
+=== Epoch 62/72 ===
+Training:  18%|█▊        | 119/662 [02:47<12:15,  1.35s/it]Classification Loss : 2.9526 | Localization Loss : 4.5152 [1e-05, 1.0000000000000002e-06]
+Training:  94%|█████████▎| 619/662 [15:07<00:59,  1.38s/it]Classification Loss : 2.8970 | Localization Loss : 4.5347 [1e-05, 1.0000000000000002e-06]
+Training: 100%|██████████| 662/662 [16:08<00:00,  1.46s/it]
+Running Validation for Epoch 62...
+Validating: 100%|██████████| 166/166 [01:06<00:00,  2.50it/s]
+Finished epoch 62 in 1034.5s
+Classification Loss : 2.8892 | Localization Loss : 4.5258
+Val Class Loss: 2.2310 | Val Loc Loss: 3.9300
+Val criterion (normalised): 1.1279  = cls 0.7611 + loc 0.3667
+Checkpoint saved at epoch 62
+
+=== Epoch 63/72 ===
+Training:  69%|██████▉   | 457/662 [10:32<04:39,  1.36s/it]Classification Loss : 3.0103 | Localization Loss : 4.8347 [1e-05, 1.0000000000000002e-06]
+Training: 100%|██████████| 662/662 [15:14<00:00,  1.38s/it]
+Running Validation for Epoch 63...
+Validating: 100%|██████████| 166/166 [01:02<00:00,  2.64it/s]
+Finished epoch 63 in 977.2s
+Classification Loss : 3.0157 | Localization Loss : 4.8483
+Val Class Loss: 2.2017 | Val Loc Loss: 3.8567
+Val criterion (normalised): 1.1110  = cls 0.7511 + loc 0.3599
+Checkpoint saved at epoch 63
+Checkpoint saved at epoch 63
+New best val criterion 1.1110 (cls 0.7511 + loc 0.3599), saved to rt_detr_mor_voc_results\best_rt_detr_mor.pth
+
+=== Epoch 64/72 ===
+Training:  45%|████▍     | 295/662 [06:49<08:54,  1.46s/it]Classification Loss : 3.0445 | Localization Loss : 5.0348 [1e-05, 1.0000000000000002e-06]
+Training: 100%|██████████| 662/662 [15:16<00:00,  1.38s/it]
+Running Validation for Epoch 64...
+Validating: 100%|██████████| 166/166 [01:03<00:00,  2.62it/s]
+Finished epoch 64 in 980.1s
+Classification Loss : 3.0469 | Localization Loss : 4.9969
+Val Class Loss: 2.1773 | Val Loc Loss: 3.8472
+Val criterion (normalised): 1.1018  = cls 0.7428 + loc 0.3590
+Checkpoint saved at epoch 64
+Checkpoint saved at epoch 64
+New best val criterion 1.1018 (cls 0.7428 + loc 0.3590), saved to rt_detr_mor_voc_results\best_rt_detr_mor.pth
+
+=== Epoch 65/72 ===
+Training:  20%|██        | 133/662 [03:04<12:44,  1.45s/it]Classification Loss : 3.0782 | Localization Loss : 5.1205 [1e-05, 1.0000000000000002e-06]
+Training:  96%|█████████▌| 633/662 [14:34<00:40,  1.39s/it]Classification Loss : 3.0369 | Localization Loss : 4.9976 [1e-05, 1.0000000000000002e-06]
+Training: 100%|██████████| 662/662 [15:12<00:00,  1.38s/it]
+Running Validation for Epoch 65...
+Validating: 100%|██████████| 166/166 [01:03<00:00,  2.62it/s]
+Finished epoch 65 in 976.0s
+Classification Loss : 3.0369 | Localization Loss : 4.9973
+Val Class Loss: 2.1913 | Val Loc Loss: 3.8536
+Val criterion (normalised): 1.1072  = cls 0.7476 + loc 0.3596
+Checkpoint saved at epoch 65
+
+=== Epoch 66/72 ===
+Training:  71%|███████   | 471/662 [10:50<04:15,  1.34s/it]Classification Loss : 3.0635 | Localization Loss : 4.9800 [1e-05, 1.0000000000000002e-06]
+Training: 100%|██████████| 662/662 [15:10<00:00,  1.38s/it]
+Running Validation for Epoch 66...
+Validating: 100%|██████████| 166/166 [01:03<00:00,  2.63it/s]
+Finished epoch 66 in 973.8s
+Classification Loss : 3.0418 | Localization Loss : 4.9900
+Val Class Loss: 2.1757 | Val Loc Loss: 3.8209
+Val criterion (normalised): 1.0988  = cls 0.7423 + loc 0.3566
+Checkpoint saved at epoch 66
+Checkpoint saved at epoch 66
+New best val criterion 1.0988 (cls 0.7423 + loc 0.3566), saved to rt_detr_mor_voc_results\best_rt_detr_mor.pth
+
+=== Epoch 67/72 ===
+Training:  47%|████▋     | 309/662 [07:08<07:49,  1.33s/it]Classification Loss : 3.0467 | Localization Loss : 4.9747 [1e-05, 1.0000000000000002e-06]
+Training: 100%|██████████| 662/662 [15:13<00:00,  1.38s/it]
+Running Validation for Epoch 67...
+Validating: 100%|██████████| 166/166 [01:03<00:00,  2.61it/s]
+Finished epoch 67 in 977.6s
+Classification Loss : 3.0478 | Localization Loss : 4.9397
+Val Class Loss: 2.1801 | Val Loc Loss: 3.8109
+Val criterion (normalised): 1.0994  = cls 0.7438 + loc 0.3556
+Checkpoint saved at epoch 67
+
+=== Epoch 68/72 ===
+Training:  22%|██▏       | 147/662 [03:21<11:20,  1.32s/it]Classification Loss : 3.0557 | Localization Loss : 4.9710 [1e-05, 1.0000000000000002e-06]
+Training:  98%|█████████▊| 647/662 [15:16<00:22,  1.52s/it]Classification Loss : 3.0468 | Localization Loss : 4.9553 [1e-05, 1.0000000000000002e-06]
+Training: 100%|██████████| 662/662 [15:37<00:00,  1.42s/it]
+Running Validation for Epoch 68...
+Validating: 100%|██████████| 166/166 [01:02<00:00,  2.64it/s]
+Finished epoch 68 in 1000.3s
+Classification Loss : 3.0453 | Localization Loss : 4.9564
+Val Class Loss: 2.1804 | Val Loc Loss: 3.7815
+Val criterion (normalised): 1.0968  = cls 0.7439 + loc 0.3529
+Checkpoint saved at epoch 68
+Checkpoint saved at epoch 68
+New best val criterion 1.0968 (cls 0.7439 + loc 0.3529), saved to rt_detr_mor_voc_results\best_rt_detr_mor.pth
+
+=== Epoch 69/72 ===
+Training:  73%|███████▎  | 485/662 [11:27<04:23,  1.49s/it]Classification Loss : 3.0300 | Localization Loss : 4.9869 [1e-05, 1.0000000000000002e-06]
+Training: 100%|██████████| 662/662 [15:43<00:00,  1.42s/it]
+Running Validation for Epoch 69...
+Validating: 100%|██████████| 166/166 [01:03<00:00,  2.62it/s]
+Finished epoch 69 in 1006.4s
+Classification Loss : 3.0133 | Localization Loss : 4.9856
+Val Class Loss: 2.1655 | Val Loc Loss: 3.8097
+Val criterion (normalised): 1.0943  = cls 0.7388 + loc 0.3555
+Checkpoint saved at epoch 69
+Checkpoint saved at epoch 69
+New best val criterion 1.0943 (cls 0.7388 + loc 0.3555), saved to rt_detr_mor_voc_results\best_rt_detr_mor.pth
+
+=== Epoch 70/72 ===
+Training:  49%|████▉     | 323/662 [07:25<07:49,  1.38s/it]Classification Loss : 3.0314 | Localization Loss : 5.0383 [1e-05, 1.0000000000000002e-06]
+Training: 100%|██████████| 662/662 [15:11<00:00,  1.38s/it]
+Running Validation for Epoch 70...
+Validating: 100%|██████████| 166/166 [01:03<00:00,  2.61it/s]
+Finished epoch 70 in 975.4s
+Classification Loss : 3.0292 | Localization Loss : 4.9722
+Val Class Loss: 2.1719 | Val Loc Loss: 3.7907
+Val criterion (normalised): 1.0947  = cls 0.7410 + loc 0.3537
+Checkpoint saved at epoch 70
+
+=== Epoch 71/72 ===
+Training:  24%|██▍       | 161/662 [03:46<11:25,  1.37s/it]Classification Loss : 3.0289 | Localization Loss : 4.8915 [1e-05, 1.0000000000000002e-06]
+Training: 100%|█████████▉| 661/662 [15:18<00:01,  1.49s/it]Classification Loss : 3.0171 | Localization Loss : 4.8759 [1e-05, 1.0000000000000002e-06]
+Training: 100%|██████████| 662/662 [15:19<00:00,  1.39s/it]
+Running Validation for Epoch 71...
+Validating: 100%|██████████| 166/166 [01:03<00:00,  2.60it/s]
+Finished epoch 71 in 983.0s
+Classification Loss : 3.0162 | Localization Loss : 4.8714
+Val Class Loss: 2.1712 | Val Loc Loss: 3.7799
+Val criterion (normalised): 1.0934  = cls 0.7407 + loc 0.3527
+Checkpoint saved at epoch 71
+Checkpoint saved at epoch 71
+New best val criterion 1.0934 (cls 0.7407 + loc 0.3527), saved to rt_detr_mor_voc_results\best_rt_detr_mor.pth
+
+=== Epoch 72/72 ===
+Training:  75%|███████▌  | 499/662 [11:33<03:39,  1.35s/it]Classification Loss : 3.0234 | Localization Loss : 4.8376 [1e-05, 1.0000000000000002e-06]
+Training: 100%|██████████| 662/662 [15:19<00:00,  1.39s/it]
+Running Validation for Epoch 72...
+Validating: 100%|██████████| 166/166 [01:03<00:00,  2.62it/s]
+Finished epoch 72 in 982.5s
+Classification Loss : 3.0156 | Localization Loss : 4.8666
+Val Class Loss: 2.1567 | Val Loc Loss: 3.7837
+Val criterion (normalised): 1.0889  = cls 0.7358 + loc 0.3531
+Checkpoint saved at epoch 72
+Checkpoint saved at epoch 72
+New best val criterion 1.0889 (cls 0.7358 + loc 0.3531), saved to rt_detr_mor_voc_results\best_rt_detr_mor.pth
+Done Training...

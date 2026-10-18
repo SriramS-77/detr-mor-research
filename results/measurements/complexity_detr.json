@@ -1,0 +1,59 @@
+{
+  "DETR": {
+    "params": {
+      "total": 44695001,
+      "trainable": 23427353,
+      "backbone": 21267648,
+      "encoder": 10521088,
+      "decoder": 12630528,
+      "transformer": 23151616,
+      "routers": 0
+    },
+    "gflops": {
+      "backbone": 59.8081536,
+      "backbone_proj": 0.1048576,
+      "encoder": 9.699328,
+      "decoder": 1.5026176,
+      "heads": 0.0549888,
+      "total": 71.1699456
+    }
+  },
+  "MoR-cyclic": {
+    "params": {
+      "total": 33120733,
+      "trainable": 11853085,
+      "backbone": 21267648,
+      "encoder": 5261314,
+      "decoder": 6316034,
+      "transformer": 11577348,
+      "routers": 1028
+    },
+    "gflops": {
+      "backbone": 59.8081536,
+      "backbone_proj": 0.1048576,
+      "encoder": 7.123049472,
+      "decoder": 1.329488384,
+      "heads": 0.034368,
+      "total": 68.399917056
+    }
+  },
+  "MoR-sequential": {
+    "params": {
+      "total": 33122275,
+      "trainable": 11854627,
+      "backbone": 21267648,
+      "encoder": 5262085,
+      "decoder": 6316805,
+      "transformer": 11578890,
+      "routers": 2570
+    },
+    "gflops": {
+      "backbone": 59.8081536,
+      "backbone_proj": 0.1048576,
+      "encoder": 6.503665664,
+      "decoder": 1.286303232,
+      "heads": 0.0549888,
+      "total": 67.757968896
+    }
+  }
+}

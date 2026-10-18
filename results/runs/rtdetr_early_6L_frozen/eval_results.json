@@ -1,0 +1,33 @@
+{
+  "backbone": "resnet34",
+  "checkpoint": "rt_detr_voc_results\\best_rt_detr.pth",
+  "class_ap": {
+    "aeroplane": 0.9145219592204514,
+    "bicycle": 0.8567447176904446,
+    "bird": 0.874049450898752,
+    "boat": 0.8254465772759297,
+    "bottle": 0.6984193759837056,
+    "bus": 0.8496289238858095,
+    "car": 0.9211352988286511,
+    "cat": 0.9055146387988938,
+    "chair": 0.6270851089918784,
+    "cow": 0.8993050389707067,
+    "diningtable": 0.7922193133879479,
+    "dog": 0.9124959318963687,
+    "horse": 0.9099529345519881,
+    "motorbike": 0.8648247476826821,
+    "person": 0.8657900565695691,
+    "pottedplant": 0.6051403385740308,
+    "sheep": 0.8683380547534982,
+    "sofa": 0.8025795216209448,
+    "train": 0.9009012883376897,
+    "tvmonitor": 0.8630129995607005
+  },
+  "config": "rt_detr_config.yaml",
+  "iou_threshold": 0.5,
+  "mean_ap": 0.8378553138740322,
+  "method": "area",
+  "score_threshold": 0.25,
+  "timestamp": "2026-09-19T00:18:45",
+  "use_nms": false
+}

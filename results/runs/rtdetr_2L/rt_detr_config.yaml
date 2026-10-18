@@ -1,0 +1,101 @@
+dataset_params:
+  train_im_sets: ['data/VOCdevkit/VOC2007', 'data/VOCdevkit/VOC2012']
+  test_im_sets: ['data/VOCdevkit/VOC2007']
+  # VFL: foreground classes only. VariFocal is a per-class sigmoid loss, so
+  # there is no background class - "background" is all sigmoids low.
+  # (Was 21 with bg_class_idx 0 under the softmax formulation.)
+  num_classes : 20
+  im_size : 640
+
+model_params:
+  im_channels : 3
+  # Backbone: resnet18 / resnet34 / resnet50 / resnet101 / resnet152.
+  # The per-stage channel widths (S3/S4/S5) are probed at build time, so
+  # switching between the BasicBlock nets (18/34 -> 128/256/512) and the
+  # Bottleneck nets (50/101/152 -> 512/1024/2048) needs no other change.
+  # backbone_channels is gone: it is derived now, not declared.
+  backbone : 'resnet34'
+  pretrained_backbone : True
+  d_model : 256
+  num_queries : 25
+  # Detections reported per image at inference. RT-DETR takes the top-k
+  # (query, class) PAIRS from the flattened score matrix, so this is NOT capped
+  # by num_queries - 25 queries x 20 classes gives 500 candidate pairs. The
+  # paper sets it equal to num_queries (300), but 25 would truncate the
+  # low-precision tail of the PR curve that an mAP sweep at threshold 0 exists
+  # to measure.
+  num_top_queries : 100
+  # Set False to train the backbone. Do: a frozen ImageNet ResNet caps accuracy
+  # harder than anything else in this config. train_params.backbone_lr then
+  # gives it its own (lower) learning rate.
+  freeze_backbone : False
+  # encoder_num_recursions : 3
+  encoder_num_blocks : 1
+  # encoder_recursion_type : 'cyclic'
+  encoder_attn_heads : 8
+  # decoder_num_recursions : 3
+  decoder_num_blocks : 2
+  # decoder_recursion_type : 'cyclic'
+  decoder_attn_heads : 8
+  dropout_prob : 0.1
+  ff_inner_dim : 1024
+  # CCFM fusion blocks (CSPRepLayer). num_blocks is RT-DETR's round(3*depth_mult);
+  # expansion sets the hidden width as a fraction of d_model (0.5 = lighter).
+  csp_num_blocks : 3
+  csp_expansion : 1.0
+  # CDN contrastive denoising, training only (0 disables it).
+  # Realised DN query count is ~2*num_denoising. With num_queries 25, RT-DETR's
+  # default of 100 would give ~200 DN queries against 25 real ones, so keep this
+  # proportionate to num_queries.
+  num_denoising : 50
+  label_noise_ratio : 0.5
+  box_noise_scale : 1.0
+  # Matcher costs, used only to decide the assignment. RT-DETR makes
+  # classification twice as decisive here as it is in the loss itself.
+  cls_cost_weight : 2.
+  # Loss weights. cls_loss_weight is separate from cls_cost_weight above -
+  # they were previously one number doing both jobs.
+  cls_loss_weight : 1.
+  # L1 is computed in cxcywh (as in the paper), not xyxy. In xyxy a centre
+  # shift moves both corners, so the same error is counted twice and this
+  # weight is effectively doubled against giou.
+  l1_cost_weight : 5.
+  giou_cost_weight : 2.
+  nms_threshold : 0.5
+  # VariFocal loss. alpha weights the focal term applied to negatives; gamma is
+  # the focal exponent. Positives are weighted by their IoU instead, and are
+  # deliberately NOT focal-attenuated. bg_class_weight is gone - VFL handles the
+  # foreground/background imbalance through the focal term on negatives.
+  vfl_alpha : 0.75
+  vfl_gamma : 2.0
+
+
+train_params:
+  task_name: 'rt_detr_voc_results'
+  eval_score_threshold: 0.0
+  infer_score_threshold: 0.5
+  use_nms_eval : False
+  use_nms_infer : True
+  seed: 1111
+  acc_steps: 1
+  num_epochs: 72
+  batch_size: 23
+  lr_steps: [ 60 ]
+  lr: 0.0001
+  # Learning rate for backbone.* only, applied as its own AdamW param group.
+  # The backbone is pretrained and the detector is not, so one rate for both
+  # either starves the detector or wrecks the ImageNet features in the first
+  # few hundred steps. RT-DETR / DETR / Deformable-DETR all use 0.1x the base
+  # rate. Ignored while freeze_backbone is True (the group is then empty).
+  backbone_lr: 0.00001
+  log_steps : 500
+  ckpt_name: 'rt_detr.pth'
+  # Fraction of the train imageset held out for per-epoch validation.
+  val_split: 0.2
+  # DataLoader worker processes. Augmentation is CPU-bound per image, so
+  # workers keep the GPU fed. Forced to 0 in a Windows notebook, where spawn
+  # cannot pickle VOCDataset out of __main__; honoured on Linux / Kaggle.
+  num_workers: 1
+  # Max grad norm. DETR-family training is normally clipped at 0.1; deformable
+  # sampling offsets are the usual source of a spike. Set to 0 to disable.
+  grad_clip: 0.1

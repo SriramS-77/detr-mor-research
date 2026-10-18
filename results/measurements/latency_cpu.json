@@ -1,0 +1,113 @@
+{
+  "device": "cpu",
+  "hardware": "Intel64 Family 6 Model 181 Stepping 0, GenuineIntel",
+  "torch": "2.14.0+cpu",
+  "threads": 12,
+  "size": 640,
+  "iters": 20,
+  "warmup": 3,
+  "timestamp": "2026-10-06T11:43:22",
+  "results": [
+    {
+      "batch": 1,
+      "precision": "fp32",
+      "ms_median": 3861.5761500041117,
+      "ms_mean": 3918.7110349994327,
+      "ms_p90": 5681.714199992712,
+      "ms_std": 901.8434917075024,
+      "fps": 0.2589616159709644,
+      "stage_ms_median": {
+        "decoder": 224.08875000837725
+      },
+      "model": "rt2",
+      "name": "RT-DETR (2L)"
+    },
+    {
+      "batch": 1,
+      "precision": "fp32",
+      "ms_median": 3749.9508999899263,
+      "ms_mean": 3670.716999999422,
+      "ms_p90": 4168.954299995676,
+      "ms_std": 483.3612243053909,
+      "fps": 0.2666701582686553,
+      "stage_ms_median": {
+        "decoder": 530.5324000000837
+      },
+      "model": "rt6",
+      "name": "RT-DETR (6L)"
+    },
+    {
+      "batch": 1,
+      "precision": "fp32",
+      "ms_median": 3608.546550000028,
+      "ms_mean": 3690.43126000106,
+      "ms_p90": 4449.800400005188,
+      "ms_std": 569.4264791481658,
+      "fps": 0.2771198836273824,
+      "stage_ms_median": {
+        "decoder": 506.0272499904386
+      },
+      "model": "rt23",
+      "name": "RT-DETR-MoR (2x3)"
+    },
+    {
+      "batch": 1,
+      "precision": "fp32",
+      "ms_median": 3544.656500009296,
+      "ms_mean": 3646.9443850008247,
+      "ms_p90": 5588.280699987081,
+      "ms_std": 1184.837777042754,
+      "fps": 0.2821147831947545,
+      "stage_ms_median": {
+        "decoder": 398.40159998857416
+      },
+      "model": "rt32",
+      "name": "RT-DETR-MoR (3x2)"
+    },
+    {
+      "batch": 1,
+      "precision": "fp32",
+      "ms_median": 1458.252900010848,
+      "ms_mean": 1821.9026250000752,
+      "ms_p90": 3389.7953999985475,
+      "ms_std": 1076.9566864009216,
+      "fps": 0.6857521078768717,
+      "stage_ms_median": {
+        "encoder": 275.97524999146117,
+        "decoder": 133.59889999992447
+      },
+      "model": "detr",
+      "name": "DETR"
+    },
+    {
+      "batch": 1,
+      "precision": "fp32",
+      "ms_median": 1293.6533999964013,
+      "ms_mean": 1418.4469100015122,
+      "ms_p90": 1565.1766000082716,
+      "ms_std": 507.1705069590382,
+      "fps": 0.7730045775806579,
+      "stage_ms_median": {
+        "encoder": 195.49940000433708,
+        "decoder": 101.80399999808287
+      },
+      "model": "cyc",
+      "name": "DETR-MoR (cyclic)"
+    },
+    {
+      "batch": 1,
+      "precision": "fp32",
+      "ms_median": 1094.4539500051178,
+      "ms_mean": 1136.4865650000866,
+      "ms_p90": 1301.6463999956613,
+      "ms_std": 124.66204449124268,
+      "fps": 0.9136976480329062,
+      "stage_ms_median": {
+        "encoder": 159.20770000229822,
+        "decoder": 78.14384999801405
+      },
+      "model": "seq",
+      "name": "DETR-MoR (sequential)"
+    }
+  ]
+}

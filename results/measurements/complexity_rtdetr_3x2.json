@@ -1,0 +1,43 @@
+{
+  "device": "cpu",
+  "notebook": "rt_detr_mor.ipynb",
+  "config": "rt_detr_all_results/rt_detr_mor_voc_results (3 blocks, 2 recursions)/rt_detr_mor_config.yaml",
+  "overrides": [],
+  "flops": true,
+  "fp16": false,
+  "deploy": true,
+  "iters": 100,
+  "results": [
+    {
+      "num_queries": 25,
+      "size": 640,
+      "tokens": {
+        "S3": 6400,
+        "S4": 1600,
+        "S5": 400
+      },
+      "params_m": {
+        "backbone": 21.267648,
+        "input_proj": 0.230912,
+        "aifi": 0.790272,
+        "ccfm": 9.83552,
+        "query_select": 0.138264,
+        "decoder": 3.320941,
+        "heads_post": 0.01028,
+        "total": 35.599213
+      },
+      "gflops": {
+        "backbone": 59.8081536,
+        "input_proj": 0.7340032,
+        "aifi": 0.7929856,
+        "ccfm": 44.040192,
+        "query_select": 2.3052288,
+        "decoder": 6.857782784,
+        "heads_post": 0.000512,
+        "decoder.value_proj": 6.6060288,
+        "unattributed": 0.0,
+        "total": 114.538857984
+      }
+    }
+  ]
+}

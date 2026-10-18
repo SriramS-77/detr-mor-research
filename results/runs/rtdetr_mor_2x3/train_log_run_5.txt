@@ -1,0 +1,42 @@
+{'dataset_params': {'train_im_sets': ['data/VOCdevkit/VOC2007', 'data/VOCdevkit/VOC2012'], 'test_im_sets': ['data/VOCdevkit/VOC2007'], 'num_classes': 20, 'im_size': 640}, 'model_params': {'im_channels': 3, 'backbone': 'resnet34', 'pretrained_backbone': True, 'd_model': 256, 'num_queries': 25, 'num_top_queries': 100, 'freeze_backbone': False, 'encoder_num_blocks': 1, 'encoder_attn_heads': 8, 'decoder_num_blocks': 2, 'decoder_num_recursions': 3, 'decoder_dense_first': False, 'decoder_dense_last': False, 'decoder_attn_heads': 8, 'dropout_prob': 0.1, 'ff_inner_dim': 1024, 'csp_num_blocks': 3, 'csp_expansion': 1.0, 'num_denoising': 50, 'label_noise_ratio': 0.5, 'box_noise_scale': 1.0, 'cls_cost_weight': 2.0, 'cls_loss_weight': 1.0, 'l1_cost_weight': 5.0, 'giou_cost_weight': 2.0, 'nms_threshold': 0.5, 'vfl_alpha': 0.75, 'vfl_gamma': 2.0}, 'train_params': {'task_name': 'rt_detr_mor_voc_results', 'eval_score_threshold': 0.0, 'infer_score_threshold': 0.5, 'use_nms_eval': False, 'use_nms_infer': True, 'seed': 1111, 'acc_steps': 1, 'num_epochs': 72, 'batch_size': 20, 'lr_steps': [60], 'lr': 0.0001, 'backbone_lr': 1e-05, 'log_steps': 500, 'ckpt_name': 'rt_detr_mor.pth', 'val_split': 0.2, 'num_workers': 2, 'grad_clip': 0.1}}
+Device: cuda
+{0: 'aeroplane', 1: 'bicycle', 2: 'bird', 3: 'boat', 4: 'bottle', 5: 'bus', 6: 'car', 7: 'cat', 8: 'chair', 9: 'cow', 10: 'diningtable', 11: 'dog', 12: 'horse', 13: 'motorbike', 14: 'person', 15: 'pottedplant', 16: 'sheep', 17: 'sofa', 18: 'train', 19: 'tvmonitor'}
+Total 16536 images found
+Windows notebook: forcing num_workers 2 -> 0 (spawn cannot pickle VOCDataset out of __main__). The config value is honoured on Linux / Kaggle.
+Dataset: 16536 images -> 13229 train / 3307 val | batch_size 20 | num_workers 0
+  train transforms: train (augmented)
+  val   transforms: test (resize + normalise only, no augmentation)
+Trainable parameters: 35,346,270 across 266 tensors
+Backbone trainable: 21,267,648 params at lr 1e-05 (detector 14,078,622 at lr 0.0001)
+CDN active (num_denoising=50): train loss includes the denoising terms, val loss does not, so the two are not directly comparable.
+Loading checkpoint as one exists at rt_detr_mor_voc_results\rt_detr_mor.pth
+Resuming at epoch 60 with lr 0.0001
+
+=== Epoch 60/72 ===
+Training:  67%|██████▋   | 443/662 [09:06<04:27,  1.22s/it]Classification Loss : 3.2323 | Localization Loss : 5.4446 [0.0001, 1e-05]
+Training: 100%|██████████| 662/662 [13:34<00:00,  1.23s/it]
+Running Validation for Epoch 60...
+Validating: 100%|██████████| 166/166 [01:07<00:00,  2.45it/s]
+Finished epoch 60 in 882.1s
+Classification Loss : 3.2250 | Localization Loss : 5.4298
+Val Class Loss: 2.2253 | Val Loc Loss: 4.1493
+Val criterion (normalised): 1.1464  = cls 0.7592 + loc 0.3872
+Checkpoint saved at epoch 60
+Checkpoint saved at epoch 60
+New best val criterion 1.1464 (cls 0.7592 + loc 0.3872), saved to rt_detr_mor_voc_results\best_rt_detr_mor.pth
+
+=== Epoch 61/72 ===
+Training:  42%|████▏     | 281/662 [06:00<09:07,  1.44s/it]Classification Loss : 3.1386 | Localization Loss : 5.1401 [1e-05, 1.0000000000000002e-06]
+Training: 100%|██████████| 662/662 [15:31<00:00,  1.41s/it]
+Running Validation for Epoch 61...
+Validating: 100%|██████████| 166/166 [01:20<00:00,  2.06it/s]
+Finished epoch 61 in 1012.2s
+Classification Loss : 3.1234 | Localization Loss : 5.1106
+Val Class Loss: 2.2183 | Val Loc Loss: 3.8423
+Val criterion (normalised): 1.1154  = cls 0.7568 + loc 0.3586
+Checkpoint saved at epoch 61
+Checkpoint saved at epoch 61
+New best val criterion 1.1154 (cls 0.7568 + loc 0.3586), saved to rt_detr_mor_voc_results\best_rt_detr_mor.pth
+
+=== Epoch 62/72 ===
+Training:   8%|▊         | 53/662 [01:37<18:44,  1.85s/it]

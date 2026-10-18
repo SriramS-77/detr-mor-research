@@ -1,0 +1,41 @@
+{'dataset_params': {'train_im_sets': ['data/VOCdevkit/VOC2007', 'data/VOCdevkit/VOC2012'], 'test_im_sets': ['data/VOCdevkit/VOC2007'], 'num_classes': 20, 'im_size': 640}, 'model_params': {'im_channels': 3, 'backbone': 'resnet34', 'pretrained_backbone': True, 'd_model': 256, 'num_queries': 25, 'num_top_queries': 100, 'freeze_backbone': False, 'encoder_num_blocks': 1, 'encoder_attn_heads': 8, 'decoder_num_blocks': 2, 'decoder_attn_heads': 8, 'dropout_prob': 0.1, 'ff_inner_dim': 1024, 'csp_num_blocks': 3, 'csp_expansion': 1.0, 'num_denoising': 50, 'label_noise_ratio': 0.5, 'box_noise_scale': 1.0, 'cls_cost_weight': 2.0, 'cls_loss_weight': 1.0, 'l1_cost_weight': 5.0, 'giou_cost_weight': 2.0, 'nms_threshold': 0.5, 'vfl_alpha': 0.75, 'vfl_gamma': 2.0}, 'train_params': {'task_name': 'rt_detr_voc_results', 'eval_score_threshold': 0.0, 'infer_score_threshold': 0.5, 'use_nms_eval': False, 'use_nms_infer': True, 'seed': 1111, 'acc_steps': 1, 'num_epochs': 72, 'batch_size': 23, 'lr_steps': [60], 'lr': 0.0001, 'backbone_lr': 1e-05, 'log_steps': 500, 'ckpt_name': 'rt_detr.pth', 'val_split': 0.2, 'num_workers': 1, 'grad_clip': 0.1}}
+Device: cuda
+{0: 'aeroplane', 1: 'bicycle', 2: 'bird', 3: 'boat', 4: 'bottle', 5: 'bus', 6: 'car', 7: 'cat', 8: 'chair', 9: 'cow', 10: 'diningtable', 11: 'dog', 12: 'horse', 13: 'motorbike', 14: 'person', 15: 'pottedplant', 16: 'sheep', 17: 'sofa', 18: 'train', 19: 'tvmonitor'}
+Total 16536 images found
+Dataset: 16536 images -> 13229 train / 3307 val | batch_size 23 | num_workers 1
+  train transforms: train (augmented)
+  val   transforms: test (resize + normalise only, no augmentation)
+Trainable parameters: 35,339,592 across 256 tensors
+Backbone trainable: 21,267,648 params at lr 1e-05 (detector 14,071,944 at lr 0.0001)
+CDN active (num_denoising=50): train loss includes the denoising terms, val loss does not, so the two are not directly comparable.
+
+=== Epoch 1/72 ===
+Training:   0%|                                                                                | 0/576 [00:00<?, ?it/s]Classification Loss : 2.3841 | Localization Loss : 21.0537 [0.0001, 1e-05]
+Training:  87%|████████████████████████████████████████████████████████████▊         | 500/576 [07:31<01:03,  1.20it/s]Classification Loss : 2.7365 | Localization Loss : 14.3267 [0.0001, 1e-05]
+Training: 100%|██████████████████████████████████████████████████████████████████████| 576/576 [08:37<00:00,  1.11it/s]
+Running Validation for Epoch 1...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [01:00<00:00,  2.38it/s]
+Finished epoch 1 in 577.5s
+Classification Loss : 2.8074 | Localization Loss : 14.0074
+Best-model criterion baselined on epoch 1: cls 2.2105, loc 9.6087 (each counts as 1.0)
+Val Class Loss: 2.2105 | Val Loc Loss: 9.6087
+Val criterion (normalised): 2.0000  = cls 1.0000 + loc 1.0000
+Checkpoint saved at epoch 1
+Checkpoint saved at epoch 1
+New best val criterion 2.0000 (cls 1.0000 + loc 1.0000), saved to rt_detr_voc_results\best_rt_detr.pth
+
+=== Epoch 2/72 ===
+Training:  74%|███████████████████████████████████████████████████████████████████████▍                         | 424/576 [05:53<02:27,  1.03it/s]Classification Loss : 3.3038 | Localization Loss : 11.2309 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [08:09<00:00,  1.18it/s]
+Running Validation for Epoch 2...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [01:00<00:00,  2.37it/s]
+Finished epoch 2 in 550.5s
+Classification Loss : 3.3263 | Localization Loss : 11.0782
+Val Class Loss: 2.2894 | Val Loc Loss: 7.5220
+Val criterion (normalised): 1.8185  = cls 1.0357 + loc 0.7828
+Checkpoint saved at epoch 2
+Checkpoint saved at epoch 2
+New best val criterion 1.8185 (cls 1.0357 + loc 0.7828), saved to rt_detr_voc_results\best_rt_detr.pth
+
+=== Epoch 3/72 ===
+Training:   1%|█▏                                                                                                 | 7/576 [00:13<18:50,  1.99s/it]

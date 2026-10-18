@@ -1,0 +1,72 @@
+# DETR with Mixture-of-Recursions (MoR) encoder/decoder blocks on Pascal VOC.
+#
+# Point train_im_sets / test_im_sets at your VOCdevkit directories. Each entry must be a
+# VOC-style root containing ImageSets/Main/{trainval,test}.txt, Annotations/ and JPEGImages/.
+# Original paths from the GPU machine:
+#   train_im_sets: ['/scratch/abhilashk/Pascal-VOC/VOCdevkit/VOC2007',
+#                   '/scratch/abhilashk/Pascal-VOC/VOCdevkit/VOC2012']
+#   test_im_sets:  ['/scratch/abhilashk/Pascal-VOC/VOCdevkit/VOC2007']
+dataset_params:
+  train_im_sets: ['data/VOCdevkit/VOC2007', 'data/VOCdevkit/VOC2012']
+  test_im_sets: ['data/VOCdevkit/VOC2007']
+  num_classes : 21
+  bg_class_idx : 0
+  im_size : 640
+
+model_params:
+  im_channels : 3
+  backbone_channels : 512
+  d_model : 256
+  num_queries : 25
+  freeze_backbone : True
+  # ENCODER - the paper's Middle-Cycle / Middle-Sequence layout. The first and
+  # last of encoder_num_blocks blocks keep unique weights and run densely; the
+  # remaining (encoder_num_blocks - 2) are shared and re-applied
+  # encoder_num_recursions times, with a router dropping tokens between passes.
+  #   parameter cost  = encoder_num_blocks layers            (= 4)
+  #   effective depth = 2 + (encoder_num_blocks - 2) * encoder_num_recursions
+  #                                                          (= 2 + 2*2 = 6)
+  # encoder_num_blocks must be >= 3 (>= 4 to have a middle group worth cycling).
+  encoder_num_recursions : 3
+  encoder_num_blocks : 4
+  # 'cyclic' = Middle-Cycle (blocks visited 0,1,0,1 - the paper's best variant,
+  # routed once per full pass, so encoder_num_recursions - 1 = 1 routing
+  # decision). 'sequential' = Middle-Sequence (0,0,1,1 - routed once per block
+  # application, so (encoder_num_blocks - 2) * encoder_num_recursions - 1 = 3).
+  # Raise encoder_num_recursions, not encoder_num_blocks, to route more often
+  # under 'cyclic'.
+  encoder_recursion_type : 'sequential'
+  encoder_attn_heads : 8
+  # DECODER - same Middle-* layout, applied to the object queries. Only the
+  # query side is routed; cross-attention always sees the full encoder output.
+  # Deeply-supervised outputs = 2 + routing stages, so 2 + 2 = 4 under 'cyclic'
+  # and 2 + (4-2)*2 = 6 under 'sequential'. Must also be >= 3 blocks.
+  decoder_num_recursions : 3
+  decoder_num_blocks : 4
+  decoder_recursion_type : 'sequential'
+  decoder_attn_heads : 8
+  dropout_prob : 0.1
+  ff_inner_dim : 2048
+  cls_cost_weight : 1.
+  l1_cost_weight : 5.
+  giou_cost_weight : 2.
+  bg_class_weight : 0.1
+  nms_threshold : 0.5
+
+
+train_params:
+  task_name: 'mor_sequential_voc_results'
+  eval_score_threshold: 0.0
+  infer_score_threshold: 0.5
+  use_nms_eval : False
+  use_nms_infer : True
+  seed: 1111
+  acc_steps: 1
+  num_epochs: 300
+  batch_size: 32
+  lr_steps: [ 200 ]
+  lr: 0.00014
+  log_steps : 500
+  ckpt_name: 'mor_sequential_detr.pth'
+  # Fraction of the train imageset held out for per-epoch validation.
+  val_split: 0.2

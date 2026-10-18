@@ -1,0 +1,83 @@
+CUDA out of memory. Tried to allocate 326.00 MiB. GPU 0 has a total capacity of 14.56 GiB of which 238.81 MiB is free. Including non-PyTorch memory, this process has 14.32 GiB memory in use. Of the allocated memory 13.80 GiB is allocated by PyTorch, and 387.71 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+CUDA out of memory. Tried to allocate 206.00 MiB. GPU 0 has a total capacity of 14.56 GiB of which 180.81 MiB is free. Including non-PyTorch memory, this process has 14.38 GiB memory in use. Of the allocated memory 13.67 GiB is allocated by PyTorch, and 575.09 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+CUDA out of memory. Tried to allocate 158.00 MiB. GPU 0 has a total capacity of 14.56 GiB of which 40.81 MiB is free. Including non-PyTorch memory, this process has 14.51 GiB memory in use. Of the allocated memory 13.94 GiB is allocated by PyTorch, and 441.86 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+CUDA out of memory. Tried to allocate 206.00 MiB. GPU 0 has a total capacity of 14.56 GiB of which 178.81 MiB is free. Including non-PyTorch memory, this process has 14.38 GiB memory in use. Of the allocated memory 13.94 GiB is allocated by PyTorch, and 304.46 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+CUDA out of memory. Tried to allocate 150.00 MiB. GPU 0 has a total capacity of 14.56 GiB of which 42.81 MiB is free. Including non-PyTorch memory, this process has 14.51 GiB memory in use. Of the allocated memory 14.03 GiB is allocated by PyTorch, and 348.45 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+CUDA out of memory. Tried to allocate 198.00 MiB. GPU 0 has a total capacity of 14.56 GiB of which 76.81 MiB is free. Including non-PyTorch memory, this process has 14.48 GiB memory in use. Of the allocated memory 13.89 GiB is allocated by PyTorch, and 454.16 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+CUDA out of memory. Tried to allocate 250.00 MiB. GPU 0 has a total capacity of 14.56 GiB of which 46.81 MiB is free. Including non-PyTorch memory, this process has 14.51 GiB memory in use. Of the allocated memory 14.08 GiB is allocated by PyTorch, and 295.65 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+CUDA out of memory. Tried to allocate 150.00 MiB. GPU 0 has a total capacity of 14.56 GiB of which 52.81 MiB is free. Including non-PyTorch memory, this process has 14.50 GiB memory in use. Of the allocated memory 14.28 GiB is allocated by PyTorch, and 77.83 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+Epoch 1: Train_Class_Loss=3.046002, Train_Loc_Loss=13.192432, Val_Class_Loss=2.197290, Val_Loc_Loss=8.491176, Val_Norm_Criterion=2.000000
+Epoch 2: Train_Class_Loss=3.402238, Train_Loc_Loss=10.240068, Val_Class_Loss=2.380495, Val_Loc_Loss=7.416401, Val_Norm_Criterion=1.956802
+Epoch 3: Train_Class_Loss=3.404946, Train_Loc_Loss=9.212859, Val_Class_Loss=2.425655, Val_Loc_Loss=6.523446, Val_Norm_Criterion=1.872192
+Epoch 4: Train_Class_Loss=3.407626, Train_Loc_Loss=8.383410, Val_Class_Loss=2.244221, Val_Loc_Loss=5.914980, Val_Norm_Criterion=1.717962
+Epoch 5: Train_Class_Loss=3.352844, Train_Loc_Loss=7.655279, Val_Class_Loss=2.374844, Val_Loc_Loss=5.215094, Val_Norm_Criterion=1.694984
+Epoch 6: Train_Class_Loss=3.277501, Train_Loc_Loss=7.287043, Val_Class_Loss=2.349261, Val_Loc_Loss=4.882569, Val_Norm_Criterion=1.644180
+Epoch 7: Train_Class_Loss=3.220750, Train_Loc_Loss=6.868319, Val_Class_Loss=2.235225, Val_Loc_Loss=4.626045, Val_Norm_Criterion=1.562071
+Epoch 8: Train_Class_Loss=3.188266, Train_Loc_Loss=6.600404, Val_Class_Loss=2.350514, Val_Loc_Loss=4.395913, Val_Norm_Criterion=1.587437
+Epoch 9: Train_Class_Loss=3.136871, Train_Loc_Loss=6.482467, Val_Class_Loss=2.145520, Val_Loc_Loss=4.437583, Val_Norm_Criterion=1.499050
+Epoch 10: Train_Class_Loss=3.089223, Train_Loc_Loss=6.305532, Val_Class_Loss=2.253563, Val_Loc_Loss=4.314639, Val_Norm_Criterion=1.533742
+Epoch 11: Train_Class_Loss=3.060369, Train_Loc_Loss=6.206783, Val_Class_Loss=2.238884, Val_Loc_Loss=4.076252, Val_Norm_Criterion=1.498987
+Epoch 12: Train_Class_Loss=3.005867, Train_Loc_Loss=6.054025, Val_Class_Loss=2.077624, Val_Loc_Loss=4.042233, Val_Norm_Criterion=1.421590
+Epoch 13: Train_Class_Loss=2.995986, Train_Loc_Loss=5.943797, Val_Class_Loss=2.008665, Val_Loc_Loss=3.992578, Val_Norm_Criterion=1.384359
+Epoch 14: Train_Class_Loss=2.973243, Train_Loc_Loss=5.834893, Val_Class_Loss=2.065022, Val_Loc_Loss=3.904108, Val_Norm_Criterion=1.399588
+Epoch 15: Train_Class_Loss=2.943636, Train_Loc_Loss=5.744524, Val_Class_Loss=2.065523, Val_Loc_Loss=3.775313, Val_Norm_Criterion=1.384648
+Epoch 16: Train_Class_Loss=2.943521, Train_Loc_Loss=5.653935, Val_Class_Loss=1.956014, Val_Loc_Loss=3.855649, Val_Norm_Criterion=1.344271
+Epoch 17: Train_Class_Loss=2.904029, Train_Loc_Loss=5.564627, Val_Class_Loss=1.992888, Val_Loc_Loss=3.728610, Val_Norm_Criterion=1.346091
+Epoch 18: Train_Class_Loss=2.882702, Train_Loc_Loss=5.501315, Val_Class_Loss=1.969072, Val_Loc_Loss=3.691132, Val_Norm_Criterion=1.330839
+Epoch 19: Train_Class_Loss=2.854166, Train_Loc_Loss=5.435914, Val_Class_Loss=2.014653, Val_Loc_Loss=3.678130, Val_Norm_Criterion=1.350052
+Epoch 20: Train_Class_Loss=2.856713, Train_Loc_Loss=5.348353, Val_Class_Loss=1.922842, Val_Loc_Loss=3.720778, Val_Norm_Criterion=1.313291
+Epoch 21: Train_Class_Loss=2.816710, Train_Loc_Loss=5.308638, Val_Class_Loss=1.904092, Val_Loc_Loss=3.559785, Val_Norm_Criterion=1.285797
+Epoch 22: Train_Class_Loss=2.818524, Train_Loc_Loss=5.241079, Val_Class_Loss=1.942127, Val_Loc_Loss=3.536215, Val_Norm_Criterion=1.300331
+Epoch 23: Train_Class_Loss=2.802233, Train_Loc_Loss=5.174560, Val_Class_Loss=1.942940, Val_Loc_Loss=3.551640, Val_Norm_Criterion=1.302518
+Epoch 24: Train_Class_Loss=2.778502, Train_Loc_Loss=5.121864, Val_Class_Loss=1.885553, Val_Loc_Loss=3.575700, Val_Norm_Criterion=1.279234
+Epoch 25: Train_Class_Loss=2.769311, Train_Loc_Loss=5.099133, Val_Class_Loss=1.869262, Val_Loc_Loss=3.593365, Val_Norm_Criterion=1.273901
+Epoch 26: Train_Class_Loss=2.757885, Train_Loc_Loss=5.004378, Val_Class_Loss=1.951578, Val_Loc_Loss=3.513114, Val_Norm_Criterion=1.301912
+Epoch 27: Train_Class_Loss=2.744439, Train_Loc_Loss=4.974398, Val_Class_Loss=1.849178, Val_Loc_Loss=3.571476, Val_Norm_Criterion=1.262182
+Epoch 28: Train_Class_Loss=2.711314, Train_Loc_Loss=4.951522, Val_Class_Loss=1.871937, Val_Loc_Loss=3.422905, Val_Norm_Criterion=1.255043
+Epoch 29: Train_Class_Loss=2.704305, Train_Loc_Loss=4.903928, Val_Class_Loss=1.861470, Val_Loc_Loss=3.338002, Val_Norm_Criterion=1.240280
+Epoch 30: Train_Class_Loss=2.696330, Train_Loc_Loss=4.837181, Val_Class_Loss=1.889795, Val_Loc_Loss=3.420272, Val_Norm_Criterion=1.262860
+Epoch 31: Train_Class_Loss=2.690424, Train_Loc_Loss=4.803931, Val_Class_Loss=1.906428, Val_Loc_Loss=3.348044, Val_Norm_Criterion=1.261924
+Epoch 32: Train_Class_Loss=2.685039, Train_Loc_Loss=4.751542, Val_Class_Loss=1.790712, Val_Loc_Loss=3.442616, Val_Norm_Criterion=1.220398
+Epoch 33: Train_Class_Loss=2.669336, Train_Loc_Loss=4.692059, Val_Class_Loss=1.833160, Val_Loc_Loss=3.318889, Val_Norm_Criterion=1.225146
+Epoch 34: Train_Class_Loss=2.644035, Train_Loc_Loss=4.681483, Val_Class_Loss=1.837307, Val_Loc_Loss=3.320548, Val_Norm_Criterion=1.227228
+Epoch 35: Train_Class_Loss=2.617855, Train_Loc_Loss=4.660481, Val_Class_Loss=1.901306, Val_Loc_Loss=3.322896, Val_Norm_Criterion=1.256631
+Epoch 36: Train_Class_Loss=2.616862, Train_Loc_Loss=4.598354, Val_Class_Loss=1.848086, Val_Loc_Loss=3.299983, Val_Norm_Criterion=1.229712
+Epoch 37: Train_Class_Loss=2.613563, Train_Loc_Loss=4.535342, Val_Class_Loss=1.852367, Val_Loc_Loss=3.301445, Val_Norm_Criterion=1.231833
+Epoch 38: Train_Class_Loss=2.592759, Train_Loc_Loss=4.566379, Val_Class_Loss=1.844566, Val_Loc_Loss=3.222543, Val_Norm_Criterion=1.218990
+Epoch 39: Train_Class_Loss=2.581386, Train_Loc_Loss=4.484337, Val_Class_Loss=1.719416, Val_Loc_Loss=3.259236, Val_Norm_Criterion=1.166355
+Epoch 40: Train_Class_Loss=2.565734, Train_Loc_Loss=4.435713, Val_Class_Loss=1.780857, Val_Loc_Loss=3.251978, Val_Norm_Criterion=1.193462
+Epoch 41: Train_Class_Loss=2.570695, Train_Loc_Loss=4.419366, Val_Class_Loss=1.881051, Val_Loc_Loss=3.219611, Val_Norm_Criterion=1.235249
+Epoch 42: Train_Class_Loss=2.541072, Train_Loc_Loss=4.377304, Val_Class_Loss=1.752158, Val_Loc_Loss=3.254505, Val_Norm_Criterion=1.180699
+Epoch 43: Train_Class_Loss=2.526819, Train_Loc_Loss=4.394415, Val_Class_Loss=1.821475, Val_Loc_Loss=3.169730, Val_Norm_Criterion=1.202261
+Epoch 44: Train_Class_Loss=2.520252, Train_Loc_Loss=4.339678, Val_Class_Loss=1.761914, Val_Loc_Loss=3.183063, Val_Norm_Criterion=1.176725
+Epoch 45: Train_Class_Loss=2.518021, Train_Loc_Loss=4.291688, Val_Class_Loss=1.717507, Val_Loc_Loss=3.143562, Val_Norm_Criterion=1.151863
+Epoch 46: Train_Class_Loss=2.497987, Train_Loc_Loss=4.277204, Val_Class_Loss=1.784389, Val_Loc_Loss=3.173797, Val_Norm_Criterion=1.185862
+Epoch 47: Train_Class_Loss=2.494937, Train_Loc_Loss=4.272498, Val_Class_Loss=1.779848, Val_Loc_Loss=3.162418, Val_Norm_Criterion=1.182455
+Epoch 48: Train_Class_Loss=2.502353, Train_Loc_Loss=4.218086, Val_Class_Loss=1.688462, Val_Loc_Loss=3.207892, Val_Norm_Criterion=1.146220
+Epoch 49: Train_Class_Loss=2.474687, Train_Loc_Loss=4.192075, Val_Class_Loss=1.796536, Val_Loc_Loss=3.092349, Val_Norm_Criterion=1.181798
+Epoch 50: Train_Class_Loss=2.458098, Train_Loc_Loss=4.177314, Val_Class_Loss=1.736543, Val_Loc_Loss=3.170677, Val_Norm_Criterion=1.163720
+Epoch 51: Train_Class_Loss=2.456106, Train_Loc_Loss=4.129078, Val_Class_Loss=1.787350, Val_Loc_Loss=3.141646, Val_Norm_Criterion=1.183423
+Epoch 52: Train_Class_Loss=2.453565, Train_Loc_Loss=4.102182, Val_Class_Loss=1.736507, Val_Loc_Loss=3.269338, Val_Norm_Criterion=1.175323
+Epoch 53: Train_Class_Loss=2.435719, Train_Loc_Loss=4.012060, Val_Class_Loss=1.744844, Val_Loc_Loss=3.184372, Val_Norm_Criterion=1.169110
+Epoch 54: Train_Class_Loss=2.424089, Train_Loc_Loss=4.028455, Val_Class_Loss=1.722679, Val_Loc_Loss=3.107992, Val_Norm_Criterion=1.150028
+Epoch 55: Train_Class_Loss=2.404385, Train_Loc_Loss=3.974940, Val_Class_Loss=1.771406, Val_Loc_Loss=3.141884, Val_Norm_Criterion=1.176195
+Epoch 56: Train_Class_Loss=2.397368, Train_Loc_Loss=3.936287, Val_Class_Loss=1.778099, Val_Loc_Loss=3.105968, Val_Norm_Criterion=1.175012
+Epoch 57: Train_Class_Loss=2.394878, Train_Loc_Loss=3.909340, Val_Class_Loss=1.734146, Val_Loc_Loss=3.117598, Val_Norm_Criterion=1.156378
+Epoch 58: Train_Class_Loss=2.373898, Train_Loc_Loss=3.946081, Val_Class_Loss=1.802126, Val_Loc_Loss=3.063411, Val_Norm_Criterion=1.180934
+Epoch 59: Train_Class_Loss=2.365235, Train_Loc_Loss=3.909728, Val_Class_Loss=1.653716, Val_Loc_Loss=3.135864, Val_Norm_Criterion=1.121925
+Epoch 60: Train_Class_Loss=2.354835, Train_Loc_Loss=3.850898, Val_Class_Loss=1.703349, Val_Loc_Loss=3.101853, Val_Norm_Criterion=1.140507
+Epoch 61: Train_Class_Loss=2.289046, Train_Loc_Loss=3.667436, Val_Class_Loss=1.683993, Val_Loc_Loss=2.948388, Val_Norm_Criterion=1.113625
+Epoch 62: Train_Class_Loss=2.251628, Train_Loc_Loss=3.570545, Val_Class_Loss=1.666053, Val_Loc_Loss=2.927260, Val_Norm_Criterion=1.102972
+Epoch 63: Train_Class_Loss=2.236066, Train_Loc_Loss=3.582241, Val_Class_Loss=1.659768, Val_Loc_Loss=2.911700, Val_Norm_Criterion=1.098279
+Epoch 64: Train_Class_Loss=2.221873, Train_Loc_Loss=3.511755, Val_Class_Loss=1.694859, Val_Loc_Loss=2.897237, Val_Norm_Criterion=1.112546
+Epoch 65: Train_Class_Loss=2.212440, Train_Loc_Loss=3.492888, Val_Class_Loss=1.676605, Val_Loc_Loss=2.880009, Val_Norm_Criterion=1.102210
+Epoch 66: Train_Class_Loss=2.211053, Train_Loc_Loss=3.463591, Val_Class_Loss=1.664092, Val_Loc_Loss=2.899868, Val_Norm_Criterion=1.098854
+Epoch 67: Train_Class_Loss=2.196679, Train_Loc_Loss=3.469905, Val_Class_Loss=1.661704, Val_Loc_Loss=2.889788, Val_Norm_Criterion=1.096580
+Epoch 68: Train_Class_Loss=2.204174, Train_Loc_Loss=3.447987, Val_Class_Loss=1.668878, Val_Loc_Loss=2.868851, Val_Norm_Criterion=1.097379
+Epoch 69: Train_Class_Loss=2.171148, Train_Loc_Loss=3.431941, Val_Class_Loss=1.668359, Val_Loc_Loss=2.858933, Val_Norm_Criterion=1.095975
+Epoch 70: Train_Class_Loss=2.178542, Train_Loc_Loss=3.390605, Val_Class_Loss=1.659621, Val_Loc_Loss=2.871697, Val_Norm_Criterion=1.093501
+CUDA out of memory. Tried to allocate 150.00 MiB. GPU 0 has a total capacity of 14.56 GiB of which 86.81 MiB is free. Including non-PyTorch memory, this process has 14.47 GiB memory in use. Of the allocated memory 13.98 GiB is allocated by PyTorch, and 354.97 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+CUDA out of memory. Tried to allocate 198.00 MiB. GPU 0 has a total capacity of 14.56 GiB of which 90.81 MiB is free. Including non-PyTorch memory, this process has 14.46 GiB memory in use. Of the allocated memory 14.17 GiB is allocated by PyTorch, and 152.88 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+Epoch 71: Train_Class_Loss=2.241798, Train_Loc_Loss=3.608879, Val_Class_Loss=1.641949, Val_Loc_Loss=2.840794, Val_Norm_Criterion=1.081819
+Epoch 72: Train_Class_Loss=2.230683, Train_Loc_Loss=3.550171, Val_Class_Loss=1.643204, Val_Loc_Loss=2.861027, Val_Norm_Criterion=1.084773
+Done Training...

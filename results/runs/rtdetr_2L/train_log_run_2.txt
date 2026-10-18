@@ -1,0 +1,775 @@
+{'dataset_params': {'train_im_sets': ['data/VOCdevkit/VOC2007', 'data/VOCdevkit/VOC2012'], 'test_im_sets': ['data/VOCdevkit/VOC2007'], 'num_classes': 20, 'im_size': 640}, 'model_params': {'im_channels': 3, 'backbone': 'resnet34', 'pretrained_backbone': True, 'd_model': 256, 'num_queries': 25, 'num_top_queries': 100, 'freeze_backbone': False, 'encoder_num_blocks': 1, 'encoder_attn_heads': 8, 'decoder_num_blocks': 2, 'decoder_attn_heads': 8, 'dropout_prob': 0.1, 'ff_inner_dim': 1024, 'csp_num_blocks': 3, 'csp_expansion': 1.0, 'num_denoising': 50, 'label_noise_ratio': 0.5, 'box_noise_scale': 1.0, 'cls_cost_weight': 2.0, 'cls_loss_weight': 1.0, 'l1_cost_weight': 5.0, 'giou_cost_weight': 2.0, 'nms_threshold': 0.5, 'vfl_alpha': 0.75, 'vfl_gamma': 2.0}, 'train_params': {'task_name': 'rt_detr_voc_results', 'eval_score_threshold': 0.0, 'infer_score_threshold': 0.5, 'use_nms_eval': False, 'use_nms_infer': True, 'seed': 1111, 'acc_steps': 1, 'num_epochs': 72, 'batch_size': 23, 'lr_steps': [60], 'lr': 0.0001, 'backbone_lr': 1e-05, 'log_steps': 500, 'ckpt_name': 'rt_detr.pth', 'val_split': 0.2, 'num_workers': 1, 'grad_clip': 0.1}}
+Device: cuda
+{0: 'aeroplane', 1: 'bicycle', 2: 'bird', 3: 'boat', 4: 'bottle', 5: 'bus', 6: 'car', 7: 'cat', 8: 'chair', 9: 'cow', 10: 'diningtable', 11: 'dog', 12: 'horse', 13: 'motorbike', 14: 'person', 15: 'pottedplant', 16: 'sheep', 17: 'sofa', 18: 'train', 19: 'tvmonitor'}
+Total 16536 images found
+Dataset: 16536 images -> 13229 train / 3307 val | batch_size 23 | num_workers 1
+  train transforms: train (augmented)
+  val   transforms: test (resize + normalise only, no augmentation)
+Trainable parameters: 35,339,592 across 256 tensors
+Backbone trainable: 21,267,648 params at lr 1e-05 (detector 14,071,944 at lr 0.0001)
+CDN active (num_denoising=50): train loss includes the denoising terms, val loss does not, so the two are not directly comparable.
+Loading checkpoint as one exists at rt_detr_voc_results\rt_detr.pth
+Resuming at epoch 3 with lr 0.0001
+
+=== Epoch 3/72 ===
+Training:  60%|██████████████████████████████████████████████████████████▌                                      | 348/576 [06:03<03:25,  1.11it/s]Classification Loss : 3.4200 | Localization Loss : 9.9782 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [09:33<00:00,  1.00it/s]
+Running Validation for Epoch 3...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:57<00:00,  2.50it/s]
+Finished epoch 3 in 631.5s
+Classification Loss : 3.4357 | Localization Loss : 9.8271
+Val Class Loss: 2.4220 | Val Loc Loss: 6.6188
+Val criterion (normalised): 1.7845  = cls 1.0957 + loc 0.6888
+Checkpoint saved at epoch 3
+Checkpoint saved at epoch 3
+New best val criterion 1.7845 (cls 1.0957 + loc 0.6888), saved to rt_detr_voc_results\best_rt_detr.pth
+
+=== Epoch 4/72 ===
+Training:  47%|█████████████████████████████████████████████▊                                                   | 272/576 [04:21<04:38,  1.09it/s]Classification Loss : 3.5370 | Localization Loss : 9.0645 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [26:20<00:00,  2.74s/it]
+Running Validation for Epoch 4...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [01:01<00:00,  2.34it/s]
+Finished epoch 4 in 1642.2s
+Classification Loss : 3.5364 | Localization Loss : 8.8511
+Val Class Loss: 2.5883 | Val Loc Loss: 5.8334
+Val criterion (normalised): 1.7780  = cls 1.1709 + loc 0.6071
+Checkpoint saved at epoch 4
+Checkpoint saved at epoch 4
+New best val criterion 1.7780 (cls 1.1709 + loc 0.6071), saved to rt_detr_voc_results\best_rt_detr.pth
+
+=== Epoch 5/72 ===
+Training:  34%|█████████████████████████████████                                                                | 196/576 [03:01<05:39,  1.12it/s]Classification Loss : 3.5057 | Localization Loss : 8.4704 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [08:47<00:00,  1.09it/s]
+Running Validation for Epoch 5...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:54<00:00,  2.64it/s]
+Finished epoch 5 in 581.7s
+Classification Loss : 3.5129 | Localization Loss : 8.1964
+Val Class Loss: 2.3758 | Val Loc Loss: 5.2171
+Val criterion (normalised): 1.6177  = cls 1.0748 + loc 0.5430
+Checkpoint saved at epoch 5
+Checkpoint saved at epoch 5
+New best val criterion 1.6177 (cls 1.0748 + loc 0.5430), saved to rt_detr_voc_results\best_rt_detr.pth
+
+=== Epoch 6/72 ===
+Training:  21%|████████████████████▏                                                                            | 120/576 [01:49<06:58,  1.09it/s]Classification Loss : 3.4451 | Localization Loss : 7.8259 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [08:46<00:00,  1.09it/s]
+Running Validation for Epoch 6...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:55<00:00,  2.62it/s]
+Finished epoch 6 in 581.6s
+Classification Loss : 3.4167 | Localization Loss : 7.7047
+Val Class Loss: 2.3871 | Val Loc Loss: 5.1537
+Val criterion (normalised): 1.6163  = cls 1.0799 + loc 0.5364
+Checkpoint saved at epoch 6
+Checkpoint saved at epoch 6
+New best val criterion 1.6163 (cls 1.0799 + loc 0.5364), saved to rt_detr_voc_results\best_rt_detr.pth
+
+=== Epoch 7/72 ===
+Training:   8%|███████▍                                                                                          | 44/576 [00:40<08:04,  1.10it/s]Classification Loss : 3.4739 | Localization Loss : 7.3042 [0.0001, 1e-05]
+Training:  94%|███████████████████████████████████████████████████████████████████████████████████████████▌     | 544/576 [08:24<00:29,  1.08it/s]Classification Loss : 3.3533 | Localization Loss : 7.3379 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [08:53<00:00,  1.08it/s]
+Running Validation for Epoch 7...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:55<00:00,  2.61it/s]
+Finished epoch 7 in 588.3s
+Classification Loss : 3.3485 | Localization Loss : 7.3390
+Val Class Loss: 2.4310 | Val Loc Loss: 4.7387
+Val criterion (normalised): 1.5929  = cls 1.0997 + loc 0.4932
+Checkpoint saved at epoch 7
+Checkpoint saved at epoch 7
+New best val criterion 1.5929 (cls 1.0997 + loc 0.4932), saved to rt_detr_voc_results\best_rt_detr.pth
+
+=== Epoch 8/72 ===
+Training:  81%|██████████████████████████████████████████████████████████████████████████████▊                  | 468/576 [07:09<01:37,  1.10it/s]Classification Loss : 3.3021 | Localization Loss : 7.1644 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [08:47<00:00,  1.09it/s]
+Running Validation for Epoch 8...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:55<00:00,  2.61it/s]
+Finished epoch 8 in 582.7s
+Classification Loss : 3.3104 | Localization Loss : 7.1152
+Val Class Loss: 2.3810 | Val Loc Loss: 4.5348
+Val criterion (normalised): 1.5491  = cls 1.0771 + loc 0.4719
+Checkpoint saved at epoch 8
+Checkpoint saved at epoch 8
+New best val criterion 1.5491 (cls 1.0771 + loc 0.4719), saved to rt_detr_voc_results\best_rt_detr.pth
+
+=== Epoch 9/72 ===
+Training:  68%|██████████████████████████████████████████████████████████████████                               | 392/576 [05:59<02:47,  1.10it/s]Classification Loss : 3.2406 | Localization Loss : 6.9701 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [08:47<00:00,  1.09it/s]
+Running Validation for Epoch 9...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:54<00:00,  2.64it/s]
+Finished epoch 9 in 582.5s
+Classification Loss : 3.2521 | Localization Loss : 6.9175
+Val Class Loss: 2.2182 | Val Loc Loss: 4.4163
+Val criterion (normalised): 1.4631  = cls 1.0035 + loc 0.4596
+Checkpoint saved at epoch 9
+Checkpoint saved at epoch 9
+New best val criterion 1.4631 (cls 1.0035 + loc 0.4596), saved to rt_detr_voc_results\best_rt_detr.pth
+
+=== Epoch 10/72 ===
+Training:  55%|█████████████████████████████████████████████████████▏                                           | 316/576 [04:51<03:57,  1.10it/s]Classification Loss : 3.2146 | Localization Loss : 6.7620 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [08:48<00:00,  1.09it/s]
+Running Validation for Epoch 10...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:55<00:00,  2.61it/s]
+Finished epoch 10 in 583.7s
+Classification Loss : 3.2041 | Localization Loss : 6.7408
+Val Class Loss: 2.3357 | Val Loc Loss: 4.2054
+Val criterion (normalised): 1.4943  = cls 1.0567 + loc 0.4377
+Checkpoint saved at epoch 10
+
+=== Epoch 11/72 ===
+Training:  42%|████████████████████████████████████████▍                                                        | 240/576 [03:40<05:05,  1.10it/s]Classification Loss : 3.2051 | Localization Loss : 6.6354 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [08:48<00:00,  1.09it/s]
+Running Validation for Epoch 11...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:54<00:00,  2.62it/s]
+Finished epoch 11 in 583.6s
+Classification Loss : 3.1737 | Localization Loss : 6.6009
+Val Class Loss: 2.1923 | Val Loc Loss: 4.1323
+Val criterion (normalised): 1.4218  = cls 0.9918 + loc 0.4301
+Checkpoint saved at epoch 11
+Checkpoint saved at epoch 11
+New best val criterion 1.4218 (cls 0.9918 + loc 0.4301), saved to rt_detr_voc_results\best_rt_detr.pth
+
+=== Epoch 12/72 ===
+Training:  28%|███████████████████████████▌                                                                     | 164/576 [02:30<06:17,  1.09it/s]Classification Loss : 3.1373 | Localization Loss : 6.5255 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [08:48<00:00,  1.09it/s]
+Running Validation for Epoch 12...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:54<00:00,  2.62it/s]
+Finished epoch 12 in 583.7s
+Classification Loss : 3.1414 | Localization Loss : 6.4315
+Val Class Loss: 2.0503 | Val Loc Loss: 4.2264
+Val criterion (normalised): 1.3674  = cls 0.9275 + loc 0.4399
+Checkpoint saved at epoch 12
+Checkpoint saved at epoch 12
+New best val criterion 1.3674 (cls 0.9275 + loc 0.4399), saved to rt_detr_voc_results\best_rt_detr.pth
+
+=== Epoch 13/72 ===
+Training:  15%|██████████████▉                                                                                   | 88/576 [01:20<07:31,  1.08it/s]Classification Loss : 3.1220 | Localization Loss : 6.3776 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [08:47<00:00,  1.09it/s]
+Running Validation for Epoch 13...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:54<00:00,  2.62it/s]
+Finished epoch 13 in 582.7s
+Classification Loss : 3.1206 | Localization Loss : 6.3304
+Val Class Loss: 2.1447 | Val Loc Loss: 4.0226
+Val criterion (normalised): 1.3889  = cls 0.9702 + loc 0.4186
+Checkpoint saved at epoch 13
+
+=== Epoch 14/72 ===
+Training:   2%|██                                                                                                | 12/576 [00:11<08:26,  1.11it/s]Classification Loss : 3.0262 | Localization Loss : 6.3825 [0.0001, 1e-05]
+Training:  89%|██████████████████████████████████████████████████████████████████████████████████████▏          | 512/576 [07:50<00:58,  1.09it/s]Classification Loss : 3.0935 | Localization Loss : 6.2000 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [08:48<00:00,  1.09it/s]
+Running Validation for Epoch 14...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:55<00:00,  2.62it/s]
+Finished epoch 14 in 583.7s
+Classification Loss : 3.0931 | Localization Loss : 6.2033
+Val Class Loss: 2.2213 | Val Loc Loss: 3.8784
+Val criterion (normalised): 1.4085  = cls 1.0049 + loc 0.4036
+Checkpoint saved at epoch 14
+
+=== Epoch 15/72 ===
+Training:  76%|█████████████████████████████████████████████████████████████████████████▍                       | 436/576 [06:40<02:07,  1.10it/s]Classification Loss : 3.0800 | Localization Loss : 6.0904 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [08:48<00:00,  1.09it/s]
+Running Validation for Epoch 15...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:55<00:00,  2.61it/s]
+Finished epoch 15 in 583.3s
+Classification Loss : 3.0820 | Localization Loss : 6.0841
+Val Class Loss: 2.1400 | Val Loc Loss: 3.8297
+Val criterion (normalised): 1.3667  = cls 0.9681 + loc 0.3986
+Checkpoint saved at epoch 15
+Checkpoint saved at epoch 15
+New best val criterion 1.3667 (cls 0.9681 + loc 0.3986), saved to rt_detr_voc_results\best_rt_detr.pth
+
+=== Epoch 16/72 ===
+Training:  62%|████████████████████████████████████████████████████████████▋                                    | 360/576 [05:31<03:17,  1.09it/s]Classification Loss : 3.0588 | Localization Loss : 5.9874 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [08:49<00:00,  1.09it/s]
+Running Validation for Epoch 16...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:54<00:00,  2.63it/s]
+Finished epoch 16 in 584.0s
+Classification Loss : 3.0436 | Localization Loss : 5.9879
+Val Class Loss: 2.0403 | Val Loc Loss: 3.8534
+Val criterion (normalised): 1.3240  = cls 0.9230 + loc 0.4010
+Checkpoint saved at epoch 16
+Checkpoint saved at epoch 16
+New best val criterion 1.3240 (cls 0.9230 + loc 0.4010), saved to rt_detr_voc_results\best_rt_detr.pth
+
+=== Epoch 17/72 ===
+Training:  49%|███████████████████████████████████████████████▊                                                 | 284/576 [04:20<04:26,  1.09it/s]Classification Loss : 3.0210 | Localization Loss : 5.9522 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [08:55<00:00,  1.08it/s]
+Running Validation for Epoch 17...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:55<00:00,  2.62it/s]
+Finished epoch 17 in 590.6s
+Classification Loss : 3.0241 | Localization Loss : 5.8916
+Val Class Loss: 2.0963 | Val Loc Loss: 3.8165
+Val criterion (normalised): 1.3455  = cls 0.9483 + loc 0.3972
+Checkpoint saved at epoch 17
+
+=== Epoch 18/72 ===
+Training:  36%|███████████████████████████████████                                                              | 208/576 [03:10<05:37,  1.09it/s]Classification Loss : 3.0207 | Localization Loss : 5.9000 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [08:48<00:00,  1.09it/s]
+Running Validation for Epoch 18...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:54<00:00,  2.62it/s]
+Finished epoch 18 in 583.8s
+Classification Loss : 2.9954 | Localization Loss : 5.8478
+Val Class Loss: 2.0808 | Val Loc Loss: 3.8641
+Val criterion (normalised): 1.3435  = cls 0.9413 + loc 0.4021
+Checkpoint saved at epoch 18
+
+=== Epoch 19/72 ===
+Training:  23%|██████████████████████▏                                                                          | 132/576 [02:01<06:46,  1.09it/s]Classification Loss : 3.0013 | Localization Loss : 5.8136 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [08:49<00:00,  1.09it/s]
+Running Validation for Epoch 19...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:54<00:00,  2.63it/s]
+Finished epoch 19 in 584.6s
+Classification Loss : 2.9842 | Localization Loss : 5.7468
+Val Class Loss: 2.0086 | Val Loc Loss: 3.7652
+Val criterion (normalised): 1.3005  = cls 0.9087 + loc 0.3919
+Checkpoint saved at epoch 19
+Checkpoint saved at epoch 19
+New best val criterion 1.3005 (cls 0.9087 + loc 0.3919), saved to rt_detr_voc_results\best_rt_detr.pth
+
+=== Epoch 20/72 ===
+Training:  10%|█████████▌                                                                                        | 56/576 [00:51<07:54,  1.10it/s]Classification Loss : 2.9985 | Localization Loss : 5.7165 [0.0001, 1e-05]
+Training:  97%|█████████████████████████████████████████████████████████████████████████████████████████████▋   | 556/576 [08:31<00:18,  1.08it/s]Classification Loss : 2.9802 | Localization Loss : 5.6979 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [08:49<00:00,  1.09it/s]
+Running Validation for Epoch 20...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:55<00:00,  2.61it/s]
+Finished epoch 20 in 584.4s
+Classification Loss : 2.9800 | Localization Loss : 5.6944
+Val Class Loss: 1.9854 | Val Loc Loss: 3.7037
+Val criterion (normalised): 1.2836  = cls 0.8982 + loc 0.3855
+Checkpoint saved at epoch 20
+Checkpoint saved at epoch 20
+New best val criterion 1.2836 (cls 0.8982 + loc 0.3855), saved to rt_detr_voc_results\best_rt_detr.pth
+
+=== Epoch 21/72 ===
+Training:  83%|████████████████████████████████████████████████████████████████████████████████▊                | 480/576 [07:20<01:29,  1.07it/s]Classification Loss : 2.9434 | Localization Loss : 5.6217 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [08:47<00:00,  1.09it/s]
+Running Validation for Epoch 21...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:54<00:00,  2.64it/s]
+Finished epoch 21 in 581.7s
+Classification Loss : 2.9427 | Localization Loss : 5.6308
+Val Class Loss: 2.0351 | Val Loc Loss: 3.6848
+Val criterion (normalised): 1.3041  = cls 0.9206 + loc 0.3835
+Checkpoint saved at epoch 21
+
+=== Epoch 22/72 ===
+Training:  70%|████████████████████████████████████████████████████████████████████                             | 404/576 [06:10<02:36,  1.10it/s]Classification Loss : 2.9139 | Localization Loss : 5.5418 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [08:47<00:00,  1.09it/s]
+Running Validation for Epoch 22...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:54<00:00,  2.64it/s]
+Finished epoch 22 in 582.6s
+Classification Loss : 2.9143 | Localization Loss : 5.5263
+Val Class Loss: 1.9765 | Val Loc Loss: 3.6651
+Val criterion (normalised): 1.2755  = cls 0.8941 + loc 0.3814
+Checkpoint saved at epoch 22
+Checkpoint saved at epoch 22
+New best val criterion 1.2755 (cls 0.8941 + loc 0.3814), saved to rt_detr_voc_results\best_rt_detr.pth
+
+=== Epoch 23/72 ===
+Training:  57%|███████████████████████████████████████████████████████▏                                         | 328/576 [05:00<03:48,  1.09it/s]Classification Loss : 2.9200 | Localization Loss : 5.5334 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [08:47<00:00,  1.09it/s]
+Running Validation for Epoch 23...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:54<00:00,  2.63it/s]
+Finished epoch 23 in 582.2s
+Classification Loss : 2.9067 | Localization Loss : 5.5292
+Val Class Loss: 1.9838 | Val Loc Loss: 3.6736
+Val criterion (normalised): 1.2798  = cls 0.8974 + loc 0.3823
+Checkpoint saved at epoch 23
+
+=== Epoch 24/72 ===
+Training:  44%|██████████████████████████████████████████▍                                                      | 252/576 [03:51<04:55,  1.09it/s]Classification Loss : 2.8960 | Localization Loss : 5.4691 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [08:49<00:00,  1.09it/s]
+Running Validation for Epoch 24...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:54<00:00,  2.65it/s]
+Finished epoch 24 in 583.5s
+Classification Loss : 2.8835 | Localization Loss : 5.4180
+Val Class Loss: 1.9526 | Val Loc Loss: 3.5238
+Val criterion (normalised): 1.2501  = cls 0.8833 + loc 0.3667
+Checkpoint saved at epoch 24
+Checkpoint saved at epoch 24
+New best val criterion 1.2501 (cls 0.8833 + loc 0.3667), saved to rt_detr_voc_results\best_rt_detr.pth
+
+=== Epoch 25/72 ===
+Training:  31%|█████████████████████████████▋                                                                   | 176/576 [02:42<06:07,  1.09it/s]Classification Loss : 2.8636 | Localization Loss : 5.4830 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [08:50<00:00,  1.08it/s]
+Running Validation for Epoch 25...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:54<00:00,  2.63it/s]
+Finished epoch 25 in 585.7s
+Classification Loss : 2.8824 | Localization Loss : 5.3650
+Val Class Loss: 1.9716 | Val Loc Loss: 3.5214
+Val criterion (normalised): 1.2584  = cls 0.8919 + loc 0.3665
+Checkpoint saved at epoch 25
+
+=== Epoch 26/72 ===
+Training:  17%|████████████████▊                                                                                | 100/576 [01:31<07:28,  1.06it/s]Classification Loss : 2.8677 | Localization Loss : 5.3214 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [08:49<00:00,  1.09it/s]
+Running Validation for Epoch 26...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:55<00:00,  2.61it/s]
+Finished epoch 26 in 584.6s
+Classification Loss : 2.8368 | Localization Loss : 5.3786
+Val Class Loss: 1.9883 | Val Loc Loss: 3.4772
+Val criterion (normalised): 1.2613  = cls 0.8995 + loc 0.3619
+Checkpoint saved at epoch 26
+
+=== Epoch 27/72 ===
+Training:   4%|████                                                                                              | 24/576 [00:22<08:17,  1.11it/s]Classification Loss : 2.8073 | Localization Loss : 5.2138 [0.0001, 1e-05]
+Training:  91%|████████████████████████████████████████████████████████████████████████████████████████▏        | 524/576 [08:01<00:47,  1.08it/s]Classification Loss : 2.8372 | Localization Loss : 5.2727 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [08:49<00:00,  1.09it/s]
+Running Validation for Epoch 27...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:54<00:00,  2.64it/s]
+Finished epoch 27 in 583.8s
+Classification Loss : 2.8394 | Localization Loss : 5.2671
+Val Class Loss: 2.0606 | Val Loc Loss: 3.4508
+Val criterion (normalised): 1.2913  = cls 0.9322 + loc 0.3591
+Checkpoint saved at epoch 27
+
+=== Epoch 28/72 ===
+Training:  78%|███████████████████████████████████████████████████████████████████████████▍                     | 448/576 [06:52<01:57,  1.09it/s]Classification Loss : 2.8348 | Localization Loss : 5.2322 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [08:49<00:00,  1.09it/s]
+Running Validation for Epoch 28...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:54<00:00,  2.63it/s]
+Finished epoch 28 in 584.4s
+Classification Loss : 2.8335 | Localization Loss : 5.2273
+Val Class Loss: 1.9001 | Val Loc Loss: 3.4467
+Val criterion (normalised): 1.2183  = cls 0.8596 + loc 0.3587
+Checkpoint saved at epoch 28
+Checkpoint saved at epoch 28
+New best val criterion 1.2183 (cls 0.8596 + loc 0.3587), saved to rt_detr_voc_results\best_rt_detr.pth
+
+=== Epoch 29/72 ===
+Training:  65%|██████████████████████████████████████████████████████████████▋                                  | 372/576 [05:42<03:08,  1.08it/s]Classification Loss : 2.8021 | Localization Loss : 5.1476 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [08:49<00:00,  1.09it/s]
+Running Validation for Epoch 29...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:55<00:00,  2.61it/s]
+Finished epoch 29 in 585.0s
+Classification Loss : 2.8044 | Localization Loss : 5.1872
+Val Class Loss: 1.9976 | Val Loc Loss: 3.3711
+Val criterion (normalised): 1.2545  = cls 0.9037 + loc 0.3508
+Checkpoint saved at epoch 29
+
+=== Epoch 30/72 ===
+Training:  51%|█████████████████████████████████████████████████▊                                               | 296/576 [04:32<04:21,  1.07it/s]Classification Loss : 2.7875 | Localization Loss : 5.1091 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [08:49<00:00,  1.09it/s]
+Running Validation for Epoch 30...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:55<00:00,  2.61it/s]
+Finished epoch 30 in 584.6s
+Classification Loss : 2.7893 | Localization Loss : 5.1660
+Val Class Loss: 1.9364 | Val Loc Loss: 3.3868
+Val criterion (normalised): 1.2284  = cls 0.8760 + loc 0.3525
+Checkpoint saved at epoch 30
+
+=== Epoch 31/72 ===
+Training:  38%|█████████████████████████████████████                                                            | 220/576 [03:23<05:34,  1.06it/s]Classification Loss : 2.7968 | Localization Loss : 5.0824 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [08:49<00:00,  1.09it/s]
+Running Validation for Epoch 31...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:54<00:00,  2.64it/s]
+Finished epoch 31 in 584.0s
+Classification Loss : 2.7642 | Localization Loss : 5.1072
+Val Class Loss: 1.8772 | Val Loc Loss: 3.3860
+Val criterion (normalised): 1.2016  = cls 0.8492 + loc 0.3524
+Checkpoint saved at epoch 31
+Checkpoint saved at epoch 31
+New best val criterion 1.2016 (cls 0.8492 + loc 0.3524), saved to rt_detr_voc_results\best_rt_detr.pth
+
+=== Epoch 32/72 ===
+Training:  25%|████████████████████████▎                                                                        | 144/576 [02:12<06:39,  1.08it/s]Classification Loss : 2.7654 | Localization Loss : 5.0956 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [08:48<00:00,  1.09it/s]
+Running Validation for Epoch 32...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:54<00:00,  2.63it/s]
+Finished epoch 32 in 583.5s
+Classification Loss : 2.7590 | Localization Loss : 5.0572
+Val Class Loss: 1.8068 | Val Loc Loss: 3.4098
+Val criterion (normalised): 1.1722  = cls 0.8174 + loc 0.3549
+Checkpoint saved at epoch 32
+Checkpoint saved at epoch 32
+New best val criterion 1.1722 (cls 0.8174 + loc 0.3549), saved to rt_detr_voc_results\best_rt_detr.pth
+
+=== Epoch 33/72 ===
+Training:  12%|███████████▌                                                                                      | 68/576 [01:02<07:43,  1.10it/s]Classification Loss : 2.7413 | Localization Loss : 5.0252 [0.0001, 1e-05]
+Training:  99%|███████████████████████████████████████████████████████████████████████████████████████████████▋ | 568/576 [11:20<00:11,  1.39s/it]Classification Loss : 2.7464 | Localization Loss : 5.0813 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [11:30<00:00,  1.20s/it]
+Running Validation for Epoch 33...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [01:14<00:00,  1.93it/s]
+Finished epoch 33 in 764.6s
+Classification Loss : 2.7470 | Localization Loss : 5.0804
+Val Class Loss: 1.8782 | Val Loc Loss: 3.4226
+Val criterion (normalised): 1.2059  = cls 0.8497 + loc 0.3562
+Checkpoint saved at epoch 33
+
+=== Epoch 34/72 ===
+Training:  85%|██████████████████████████████████████████████████████████████████████████████████▊              | 492/576 [10:21<01:41,  1.21s/it]Classification Loss : 2.7452 | Localization Loss : 5.0129 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [12:06<00:00,  1.26s/it]
+Running Validation for Epoch 34...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [01:15<00:00,  1.92it/s]
+Finished epoch 34 in 801.6s
+Classification Loss : 2.7457 | Localization Loss : 5.0128
+Val Class Loss: 1.8291 | Val Loc Loss: 3.3202
+Val criterion (normalised): 1.1730  = cls 0.8275 + loc 0.3455
+Checkpoint saved at epoch 34
+
+=== Epoch 35/72 ===
+Training:  72%|██████████████████████████████████████████████████████████████████████                           | 416/576 [08:42<03:37,  1.36s/it]Classification Loss : 2.7138 | Localization Loss : 4.9729 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [12:02<00:00,  1.25s/it]
+Running Validation for Epoch 35...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [01:14<00:00,  1.93it/s]
+Finished epoch 35 in 797.6s
+Classification Loss : 2.7137 | Localization Loss : 4.9615
+Val Class Loss: 1.7913 | Val Loc Loss: 3.3603
+Val criterion (normalised): 1.1601  = cls 0.8104 + loc 0.3497
+Checkpoint saved at epoch 35
+Checkpoint saved at epoch 35
+New best val criterion 1.1601 (cls 0.8104 + loc 0.3497), saved to rt_detr_voc_results\best_rt_detr.pth
+
+=== Epoch 36/72 ===
+Training:  59%|█████████████████████████████████████████████████████████▎                                       | 340/576 [07:17<04:48,  1.22s/it]Classification Loss : 2.7258 | Localization Loss : 4.9606 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [12:12<00:00,  1.27s/it]
+Running Validation for Epoch 36...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [01:15<00:00,  1.92it/s]
+Finished epoch 36 in 808.0s
+Classification Loss : 2.7134 | Localization Loss : 4.9384
+Val Class Loss: 1.8267 | Val Loc Loss: 3.3554
+Val criterion (normalised): 1.1756  = cls 0.8264 + loc 0.3492
+Checkpoint saved at epoch 36
+
+=== Epoch 37/72 ===
+Training:  46%|████████████████████████████████████████████▍                                                    | 264/576 [05:37<06:44,  1.30s/it]Classification Loss : 2.7165 | Localization Loss : 4.8453 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [12:08<00:00,  1.26s/it]
+Running Validation for Epoch 37...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [01:14<00:00,  1.92it/s]
+Finished epoch 37 in 803.2s
+Classification Loss : 2.7161 | Localization Loss : 4.9041
+Val Class Loss: 1.9286 | Val Loc Loss: 3.2916
+Val criterion (normalised): 1.2150  = cls 0.8725 + loc 0.3426
+Checkpoint saved at epoch 37
+
+=== Epoch 38/72 ===
+Training:  33%|███████████████████████████████▋                                                                 | 188/576 [03:55<07:33,  1.17s/it]Classification Loss : 2.7025 | Localization Loss : 4.8709 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [12:03<00:00,  1.26s/it]
+Running Validation for Epoch 38...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [01:14<00:00,  1.92it/s]
+Finished epoch 38 in 798.0s
+Classification Loss : 2.6986 | Localization Loss : 4.8556
+Val Class Loss: 1.8676 | Val Loc Loss: 3.3024
+Val criterion (normalised): 1.1886  = cls 0.8449 + loc 0.3437
+Checkpoint saved at epoch 38
+
+=== Epoch 39/72 ===
+Training:  19%|██████████████████▊                                                                              | 112/576 [02:18<07:55,  1.03s/it]Classification Loss : 2.6945 | Localization Loss : 4.8300 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [10:41<00:00,  1.11s/it]
+Running Validation for Epoch 39...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [01:07<00:00,  2.14it/s]
+Finished epoch 39 in 708.6s
+Classification Loss : 2.6891 | Localization Loss : 4.8256
+Val Class Loss: 1.8561 | Val Loc Loss: 3.2197
+Val criterion (normalised): 1.1747  = cls 0.8397 + loc 0.3351
+Checkpoint saved at epoch 39
+
+=== Epoch 40/72 ===
+Training:   6%|██████▏                                                                                           | 36/576 [00:38<09:24,  1.05s/it]Classification Loss : 2.6835 | Localization Loss : 4.8755 [0.0001, 1e-05]
+Training:  93%|██████████████████████████████████████████████████████████████████████████████████████████▎      | 536/576 [09:42<00:42,  1.07s/it]Classification Loss : 2.6784 | Localization Loss : 4.7966 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [10:25<00:00,  1.09s/it]
+Running Validation for Epoch 40...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [01:07<00:00,  2.15it/s]
+Finished epoch 40 in 692.3s
+Classification Loss : 2.6778 | Localization Loss : 4.8046
+Val Class Loss: 1.8306 | Val Loc Loss: 3.2864
+Val criterion (normalised): 1.1702  = cls 0.8282 + loc 0.3420
+Checkpoint saved at epoch 40
+
+=== Epoch 41/72 ===
+Training:  80%|█████████████████████████████████████████████████████████████████████████████▍                   | 460/576 [08:17<02:02,  1.06s/it]Classification Loss : 2.6838 | Localization Loss : 4.7645 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [10:23<00:00,  1.08s/it]
+Running Validation for Epoch 41...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [01:06<00:00,  2.15it/s]
+Finished epoch 41 in 690.3s
+Classification Loss : 2.6748 | Localization Loss : 4.8027
+Val Class Loss: 1.8032 | Val Loc Loss: 3.2786
+Val criterion (normalised): 1.1570  = cls 0.8158 + loc 0.3412
+Checkpoint saved at epoch 41
+Checkpoint saved at epoch 41
+New best val criterion 1.1570 (cls 0.8158 + loc 0.3412), saved to rt_detr_voc_results\best_rt_detr.pth
+
+=== Epoch 42/72 ===
+Training:  67%|████████████████████████████████████████████████████████████████▋                                | 384/576 [06:59<03:33,  1.11s/it]Classification Loss : 2.6442 | Localization Loss : 4.7656 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [10:29<00:00,  1.09s/it]
+Running Validation for Epoch 42...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [01:06<00:00,  2.15it/s]
+Finished epoch 42 in 696.5s
+Classification Loss : 2.6477 | Localization Loss : 4.7842
+Val Class Loss: 1.7829 | Val Loc Loss: 3.2459
+Val criterion (normalised): 1.1444  = cls 0.8066 + loc 0.3378
+Checkpoint saved at epoch 42
+Checkpoint saved at epoch 42
+New best val criterion 1.1444 (cls 0.8066 + loc 0.3378), saved to rt_detr_voc_results\best_rt_detr.pth
+
+=== Epoch 43/72 ===
+Training:  53%|███████████████████████████████████████████████████▊                                             | 308/576 [05:33<04:45,  1.07s/it]Classification Loss : 2.6569 | Localization Loss : 4.7130 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [10:23<00:00,  1.08s/it]
+Running Validation for Epoch 43...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [01:07<00:00,  2.13it/s]
+Finished epoch 43 in 690.8s
+Classification Loss : 2.6445 | Localization Loss : 4.7410
+Val Class Loss: 1.7606 | Val Loc Loss: 3.3341
+Val criterion (normalised): 1.1435  = cls 0.7965 + loc 0.3470
+Checkpoint saved at epoch 43
+Checkpoint saved at epoch 43
+New best val criterion 1.1435 (cls 0.7965 + loc 0.3470), saved to rt_detr_voc_results\best_rt_detr.pth
+
+=== Epoch 44/72 ===
+Training:  40%|███████████████████████████████████████                                                          | 232/576 [04:11<06:08,  1.07s/it]Classification Loss : 2.6223 | Localization Loss : 4.6739 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [10:26<00:00,  1.09s/it]
+Running Validation for Epoch 44...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [01:07<00:00,  2.13it/s]
+Finished epoch 44 in 693.9s
+Classification Loss : 2.6364 | Localization Loss : 4.7204
+Val Class Loss: 1.8171 | Val Loc Loss: 3.1914
+Val criterion (normalised): 1.1542  = cls 0.8220 + loc 0.3321
+Checkpoint saved at epoch 44
+
+=== Epoch 45/72 ===
+Training:  27%|██████████████████████████▎                                                                      | 156/576 [02:47<07:26,  1.06s/it]Classification Loss : 2.6243 | Localization Loss : 4.6260 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [10:26<00:00,  1.09s/it]
+Running Validation for Epoch 45...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [01:07<00:00,  2.13it/s]
+Finished epoch 45 in 694.5s
+Classification Loss : 2.6423 | Localization Loss : 4.6545
+Val Class Loss: 1.8168 | Val Loc Loss: 3.1358
+Val criterion (normalised): 1.1482  = cls 0.8219 + loc 0.3263
+Checkpoint saved at epoch 45
+
+=== Epoch 46/72 ===
+Training:  14%|█████████████▌                                                                                    | 80/576 [01:29<09:51,  1.19s/it]Classification Loss : 2.6190 | Localization Loss : 4.6153 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [11:04<00:00,  1.15s/it]
+Running Validation for Epoch 46...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [01:03<00:00,  2.27it/s]
+Finished epoch 46 in 727.9s
+Classification Loss : 2.6184 | Localization Loss : 4.6853
+Val Class Loss: 1.7862 | Val Loc Loss: 3.2794
+Val criterion (normalised): 1.1493  = cls 0.8081 + loc 0.3413
+Checkpoint saved at epoch 46
+
+=== Epoch 47/72 ===
+Training:   1%|▋                                                                                                  | 4/576 [00:04<10:46,  1.13s/it]Classification Loss : 2.6653 | Localization Loss : 4.9656 [0.0001, 1e-05]
+Training:  88%|████████████████████████████████████████████████████████████████████████████████████▉            | 504/576 [09:18<01:22,  1.15s/it]Classification Loss : 2.6136 | Localization Loss : 4.6293 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [10:37<00:00,  1.11s/it]
+Running Validation for Epoch 47...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [01:04<00:00,  2.22it/s]
+Finished epoch 47 in 702.6s
+Classification Loss : 2.6080 | Localization Loss : 4.6134
+Val Class Loss: 1.8058 | Val Loc Loss: 3.3157
+Val criterion (normalised): 1.1620  = cls 0.8169 + loc 0.3451
+Checkpoint saved at epoch 47
+
+=== Epoch 48/72 ===
+Training:  74%|████████████████████████████████████████████████████████████████████████                         | 428/576 [07:50<02:44,  1.11s/it]Classification Loss : 2.6266 | Localization Loss : 4.6614 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [10:29<00:00,  1.09s/it]
+Running Validation for Epoch 48...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:44<00:00,  3.25it/s]
+Finished epoch 48 in 673.5s
+Classification Loss : 2.6168 | Localization Loss : 4.6329
+Val Class Loss: 1.7606 | Val Loc Loss: 3.1356
+Val criterion (normalised): 1.1228  = cls 0.7965 + loc 0.3263
+Checkpoint saved at epoch 48
+Checkpoint saved at epoch 48
+New best val criterion 1.1228 (cls 0.7965 + loc 0.3263), saved to rt_detr_voc_results\best_rt_detr.pth
+
+=== Epoch 49/72 ===
+Training:  61%|███████████████████████████████████████████████████████████▎                                     | 352/576 [06:09<03:55,  1.05s/it]Classification Loss : 2.6067 | Localization Loss : 4.5668 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [10:05<00:00,  1.05s/it]
+Running Validation for Epoch 49...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:53<00:00,  2.68it/s]
+Finished epoch 49 in 658.9s
+Classification Loss : 2.6015 | Localization Loss : 4.5400
+Val Class Loss: 1.8998 | Val Loc Loss: 3.1515
+Val criterion (normalised): 1.1874  = cls 0.8594 + loc 0.3280
+Checkpoint saved at epoch 49
+
+=== Epoch 50/72 ===
+Training:  48%|██████████████████████████████████████████████▍                                                  | 276/576 [04:47<05:07,  1.03s/it]Classification Loss : 2.5929 | Localization Loss : 4.5601 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [11:02<00:00,  1.15s/it]
+Running Validation for Epoch 50...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:53<00:00,  2.67it/s]
+Finished epoch 50 in 716.5s
+Classification Loss : 2.5933 | Localization Loss : 4.5662
+Val Class Loss: 1.8061 | Val Loc Loss: 3.1313
+Val criterion (normalised): 1.1429  = cls 0.8170 + loc 0.3259
+Checkpoint saved at epoch 50
+
+=== Epoch 51/72 ===
+Training:  35%|█████████████████████████████████▋                                                               | 200/576 [03:27<06:29,  1.04s/it]Classification Loss : 2.5740 | Localization Loss : 4.4781 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [10:02<00:00,  1.05s/it]
+Running Validation for Epoch 51...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:54<00:00,  2.64it/s]
+Finished epoch 51 in 657.0s
+Classification Loss : 2.5894 | Localization Loss : 4.5256
+Val Class Loss: 1.8267 | Val Loc Loss: 3.1532
+Val criterion (normalised): 1.1545  = cls 0.8264 + loc 0.3282
+Checkpoint saved at epoch 51
+
+=== Epoch 52/72 ===
+Training:  22%|████████████████████▉                                                                            | 124/576 [02:10<08:05,  1.07s/it]Classification Loss : 2.5873 | Localization Loss : 4.4455 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [10:08<00:00,  1.06s/it]
+Running Validation for Epoch 52...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:54<00:00,  2.64it/s]
+Finished epoch 52 in 662.7s
+Classification Loss : 2.5837 | Localization Loss : 4.5176
+Val Class Loss: 1.7542 | Val Loc Loss: 3.1644
+Val criterion (normalised): 1.1229  = cls 0.7936 + loc 0.3293
+Checkpoint saved at epoch 52
+
+=== Epoch 53/72 ===
+Training:   8%|████████▏                                                                                         | 48/576 [00:51<09:18,  1.06s/it]Classification Loss : 2.5370 | Localization Loss : 4.5875 [0.0001, 1e-05]
+Training:  95%|████████████████████████████████████████████████████████████████████████████████████████████▎    | 548/576 [09:41<00:29,  1.06s/it]Classification Loss : 2.5802 | Localization Loss : 4.4963 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [10:10<00:00,  1.06s/it]
+Running Validation for Epoch 53...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:54<00:00,  2.63it/s]
+Finished epoch 53 in 664.9s
+Classification Loss : 2.5759 | Localization Loss : 4.4991
+Val Class Loss: 1.7325 | Val Loc Loss: 3.2121
+Val criterion (normalised): 1.1180  = cls 0.7837 + loc 0.3343
+Checkpoint saved at epoch 53
+Checkpoint saved at epoch 53
+New best val criterion 1.1180 (cls 0.7837 + loc 0.3343), saved to rt_detr_voc_results\best_rt_detr.pth
+
+=== Epoch 54/72 ===
+Training:  82%|███████████████████████████████████████████████████████████████████████████████▍                 | 472/576 [08:20<01:51,  1.07s/it]Classification Loss : 2.5412 | Localization Loss : 4.5029 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [10:09<00:00,  1.06s/it]
+Running Validation for Epoch 54...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:54<00:00,  2.64it/s]
+Finished epoch 54 in 664.3s
+Classification Loss : 2.5447 | Localization Loss : 4.5034
+Val Class Loss: 1.7586 | Val Loc Loss: 3.1134
+Val criterion (normalised): 1.1196  = cls 0.7956 + loc 0.3240
+Checkpoint saved at epoch 54
+
+=== Epoch 55/72 ===
+Training:  69%|██████████████████████████████████████████████████████████████████▋                              | 396/576 [06:59<03:11,  1.07s/it]Classification Loss : 2.5522 | Localization Loss : 4.4876 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [10:09<00:00,  1.06s/it]
+Running Validation for Epoch 55...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:54<00:00,  2.63it/s]
+Finished epoch 55 in 664.7s
+Classification Loss : 2.5485 | Localization Loss : 4.4980
+Val Class Loss: 1.7844 | Val Loc Loss: 3.1715
+Val criterion (normalised): 1.1373  = cls 0.8072 + loc 0.3301
+Checkpoint saved at epoch 55
+
+=== Epoch 56/72 ===
+Training:  56%|█████████████████████████████████████████████████████▉                                           | 320/576 [05:40<04:32,  1.06s/it]Classification Loss : 2.5476 | Localization Loss : 4.3740 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [10:11<00:00,  1.06s/it]
+Running Validation for Epoch 56...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:54<00:00,  2.63it/s]
+Finished epoch 56 in 666.0s
+Classification Loss : 2.5478 | Localization Loss : 4.4212
+Val Class Loss: 1.7784 | Val Loc Loss: 3.0946
+Val criterion (normalised): 1.1266  = cls 0.8045 + loc 0.3221
+Checkpoint saved at epoch 56
+
+=== Epoch 57/72 ===
+Training:  42%|█████████████████████████████████████████                                                        | 244/576 [04:19<05:58,  1.08s/it]Classification Loss : 2.5571 | Localization Loss : 4.5000 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [10:11<00:00,  1.06s/it]
+Running Validation for Epoch 57...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:54<00:00,  2.66it/s]
+Finished epoch 57 in 666.0s
+Classification Loss : 2.5529 | Localization Loss : 4.4460
+Val Class Loss: 1.7729 | Val Loc Loss: 3.1933
+Val criterion (normalised): 1.1344  = cls 0.8020 + loc 0.3323
+Checkpoint saved at epoch 57
+
+=== Epoch 58/72 ===
+Training:  29%|████████████████████████████▎                                                                    | 168/576 [02:58<07:16,  1.07s/it]Classification Loss : 2.5320 | Localization Loss : 4.3311 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [10:10<00:00,  1.06s/it]
+Running Validation for Epoch 58...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:54<00:00,  2.65it/s]
+Finished epoch 58 in 664.7s
+Classification Loss : 2.5261 | Localization Loss : 4.3651
+Val Class Loss: 1.7060 | Val Loc Loss: 3.1882
+Val criterion (normalised): 1.1036  = cls 0.7718 + loc 0.3318
+Checkpoint saved at epoch 58
+Checkpoint saved at epoch 58
+New best val criterion 1.1036 (cls 0.7718 + loc 0.3318), saved to rt_detr_voc_results\best_rt_detr.pth
+
+=== Epoch 59/72 ===
+Training:  16%|███████████████▋                                                                                  | 92/576 [01:37<08:32,  1.06s/it]Classification Loss : 2.5016 | Localization Loss : 4.3430 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [10:09<00:00,  1.06s/it]
+Running Validation for Epoch 59...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:54<00:00,  2.64it/s]
+Finished epoch 59 in 664.0s
+Classification Loss : 2.5248 | Localization Loss : 4.3922
+Val Class Loss: 1.7573 | Val Loc Loss: 3.0917
+Val criterion (normalised): 1.1167  = cls 0.7950 + loc 0.3218
+Checkpoint saved at epoch 59
+
+=== Epoch 60/72 ===
+Training:   3%|██▋                                                                                               | 16/576 [00:17<09:39,  1.03s/it]Classification Loss : 2.5131 | Localization Loss : 4.2403 [0.0001, 1e-05]
+Training:  90%|██████████████████████████████████████████████████████████████████████████████████████▉          | 516/576 [09:07<01:03,  1.05s/it]Classification Loss : 2.5317 | Localization Loss : 4.3925 [0.0001, 1e-05]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [10:10<00:00,  1.06s/it]
+Running Validation for Epoch 60...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:54<00:00,  2.65it/s]
+Finished epoch 60 in 664.5s
+Classification Loss : 2.5289 | Localization Loss : 4.3817
+Val Class Loss: 1.7025 | Val Loc Loss: 3.1662
+Val criterion (normalised): 1.0997  = cls 0.7702 + loc 0.3295
+Checkpoint saved at epoch 60
+Checkpoint saved at epoch 60
+New best val criterion 1.0997 (cls 0.7702 + loc 0.3295), saved to rt_detr_voc_results\best_rt_detr.pth
+
+=== Epoch 61/72 ===
+Training:  76%|██████████████████████████████████████████████████████████████████████████                       | 440/576 [07:46<02:24,  1.06s/it]Classification Loss : 2.4500 | Localization Loss : 4.1742 [1e-05, 1.0000000000000002e-06]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [10:09<00:00,  1.06s/it]
+Running Validation for Epoch 61...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:54<00:00,  2.65it/s]
+Finished epoch 61 in 664.3s
+Classification Loss : 2.4395 | Localization Loss : 4.1569
+Val Class Loss: 1.7051 | Val Loc Loss: 2.9343
+Val criterion (normalised): 1.0767  = cls 0.7714 + loc 0.3054
+Checkpoint saved at epoch 61
+Checkpoint saved at epoch 61
+New best val criterion 1.0767 (cls 0.7714 + loc 0.3054), saved to rt_detr_voc_results\best_rt_detr.pth
+
+=== Epoch 62/72 ===
+Training:  63%|█████████████████████████████████████████████████████████████▎                                   | 364/576 [06:35<05:47,  1.64s/it]Classification Loss : 2.4187 | Localization Loss : 4.0940 [1e-05, 1.0000000000000002e-06]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [11:02<00:00,  1.15s/it]
+Running Validation for Epoch 62...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [01:12<00:00,  1.98it/s]
+Finished epoch 62 in 735.6s
+Classification Loss : 2.4155 | Localization Loss : 4.0861
+Val Class Loss: 1.6866 | Val Loc Loss: 2.9005
+Val criterion (normalised): 1.0648  = cls 0.7630 + loc 0.3019
+Checkpoint saved at epoch 62
+Checkpoint saved at epoch 62
+New best val criterion 1.0648 (cls 0.7630 + loc 0.3019), saved to rt_detr_voc_results\best_rt_detr.pth
+
+=== Epoch 63/72 ===
+Training:  50%|████████████████████████████████████████████████▌                                                | 288/576 [05:25<05:03,  1.05s/it]Classification Loss : 2.4090 | Localization Loss : 4.0184 [1e-05, 1.0000000000000002e-06]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [10:28<00:00,  1.09s/it]
+Running Validation for Epoch 63...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:55<00:00,  2.60it/s]
+Finished epoch 63 in 684.1s
+Classification Loss : 2.4055 | Localization Loss : 4.0340
+Val Class Loss: 1.6880 | Val Loc Loss: 2.9102
+Val criterion (normalised): 1.0665  = cls 0.7636 + loc 0.3029
+Checkpoint saved at epoch 63
+
+=== Epoch 64/72 ===
+Training:  37%|███████████████████████████████████▋                                                             | 212/576 [03:44<06:30,  1.07s/it]Classification Loss : 2.3991 | Localization Loss : 4.0201 [1e-05, 1.0000000000000002e-06]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [10:20<00:00,  1.08s/it]
+Running Validation for Epoch 64...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [00:52<00:00,  2.76it/s]
+Finished epoch 64 in 672.1s
+Classification Loss : 2.3963 | Localization Loss : 4.0130
+Val Class Loss: 1.6777 | Val Loc Loss: 2.8817
+Val criterion (normalised): 1.0589  = cls 0.7590 + loc 0.2999
+Checkpoint saved at epoch 64
+Checkpoint saved at epoch 64
+New best val criterion 1.0589 (cls 0.7590 + loc 0.2999), saved to rt_detr_voc_results\best_rt_detr.pth
+
+=== Epoch 65/72 ===
+Training:  24%|██████████████████████▉                                                                          | 136/576 [02:23<07:41,  1.05s/it]Classification Loss : 2.3908 | Localization Loss : 4.0586 [1e-05, 1.0000000000000002e-06]
+Training: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [10:44<00:00,  1.12s/it]
+Running Validation for Epoch 65...
+Validating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 144/144 [01:04<00:00,  2.23it/s]
+Finished epoch 65 in 708.8s
+Classification Loss : 2.3983 | Localization Loss : 3.9797
+Val Class Loss: 1.6868 | Val Loc Loss: 2.8826
+Val criterion (normalised): 1.0631  = cls 0.7631 + loc 0.3000
+Checkpoint saved at epoch 65
+
+=== Epoch 66/72 ===
+Training:   1%|▌                                                                                                  | 3/576 [00:06<20:39,  2.16s/it]
