@@ -1,4 +1,4 @@
-# detr-mor
+# detr-mor-research
 
 DETR and DETR with **Mixture-of-Recursions (MoR)** blocks, for object detection on
 Pascal VOC. This is the `train_mor.ipynb` research notebook restructured into a library
